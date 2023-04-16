@@ -1,0 +1,45 @@
+item.mffs.debugger.name=MFDevice <Debugger>
+item.mffs.freqcard.blank.name=Blank ARS card
+item.mffs.freqcard.name=Forcefield frequency card
+item.mffs.mfd.offset.name=MFDevice <Offset>
+
+item.mffs.card.player.name=Player detector token
+item.mffs.card.and.name=AND token
+item.mffs.card.not.name=NOT token
+item.mffs.card.or.name=OR token
+item.mffs.card.blank.name=Blank token
+item.mffs.card.life.name=Life detector token
+item.mffs.card.mob.name=Mob detector token
+item.mffs.card.animal.name=Animal detector token
+item.mffs.card.redstone.name=Redstone input token
+item.mffs.card.item.name=Item detector token
+item.mffs.card.in0.name=Blue input token
+item.mffs.card.in1.name=Yellow input token
+item.mffs.card.in2.name=Green input token
+item.mffs.card.in3.name=Purple input token
+item.mffs.card.in4.name=Red input token
+item.mffs.card.in5.name=Cyan input token
+
+item.mffs.energy_modulator.name=Energy modulator
+item.mffs.diamond_lens.name=Diamond lens
+item.mffs.projector_base.name=Forcefield projector base
+
+tile.mffs.core.name=Forcefield core
+tile.mffs.proj.area.name=Area forcefield projector
+tile.mffs.proj.line.name=Line forcefield projector
+tile.mffs.proj.plate.name=Plate forcefield projector
+tile.mffs.proj.tube.name=Tube forcefield projector
+tile.mffs.proj.extender.name=Line projector extender
+tile.mffs.upgrade.underwater.name=Forcefield underwater upgrade
+tile.mffs.upgrade.dome.name=Forcefield dome upgrade
+tile.mffs.upgrade.breaker.name=Forcefield block cutter upgrade
+tile.mffs.upgrade.core.storage.name=Forcefield core storage upgrade
+tile.mffs.upgrade.core.range.name=Forcefield core range upgrade
+tile.mffs.upgrade.zapper.name=Forcefield zapper upgrade
+tile.mffs.upgrade.camo.name=Forcefield camouflage upgrade
+tile.mffs.upgrade.inhibitor.name=Forcefield inhibitor upgrade
+
+tile.mffs.beam.name=Wireless data beam
+
+death.attack.MFFSteslacoil=%1$s was zapped
+death.attack.MFFSteslacoil.player=%1$s was zapped while trying to escape %1$s
