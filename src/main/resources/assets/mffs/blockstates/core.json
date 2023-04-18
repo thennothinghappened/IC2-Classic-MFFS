@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {
+      "all": "mffs:blocks/core_off"
+    }
+  },
+  "variants": {
+    "normal": {
+      "model": "cube_all"
+    },
+    "active": {
+      "textures": {
+        "all": "mffs:blocks/core_on"
+      }
+    }
+  }
+}
