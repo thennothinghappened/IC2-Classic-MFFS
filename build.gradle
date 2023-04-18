@@ -11,7 +11,6 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = '1.0'
 group = 'mods.orca.mffs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -109,17 +108,4 @@ jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
-
-sourceSets { main { output.resourcesDir = output.classesDir } }
+sourceSets { main { output.resourcesDir = java.outputDir } }
