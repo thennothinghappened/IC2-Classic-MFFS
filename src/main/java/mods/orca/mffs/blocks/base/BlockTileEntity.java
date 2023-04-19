@@ -1,4 +1,4 @@
-package mods.orca.mffs.blocks;
+package mods.orca.mffs.blocks.base;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

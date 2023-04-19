@@ -3,7 +3,7 @@
   "defaults": {
     "model": "cube_all",
     "textures": {
-      "all": "mffs:blocks/core_off"
+      "all": "mffs:blocks/upgrades/camoflage_off"
     }
   },
   "variants": {
@@ -15,7 +15,7 @@
     },
     "active": {
       "textures": {
-        "all": "mffs:blocks/core_on"
+        "all": "mffs:blocks/upgrades/camoflage_on"
       }
     }
   }

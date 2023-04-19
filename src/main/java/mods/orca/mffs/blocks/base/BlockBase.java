@@ -1,9 +1,8 @@
-package mods.orca.mffs.blocks;
+package mods.orca.mffs.blocks.base;
 
-import mods.orca.mffs.MFFSMod;
+import mods.orca.mffs.blocks.ModBlocks;
 import mods.orca.mffs.client.MFFSTab;
 import mods.orca.mffs.items.ModItems;
-import mods.orca.mffs.util.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +12,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBase extends Block implements IHasModel {
+public class BlockBase extends Block {
 
     protected String name;
     private BlockRenderLayer blockRenderLayer = BlockRenderLayer.SOLID;
@@ -61,11 +60,6 @@ public class BlockBase extends Block implements IHasModel {
     @Deprecated
     public boolean isFullCube(IBlockState state) {
         return isOpaqueCube(state);
-    }
-
-    @Override
-    public void registerItemModel() {
-        MFFSMod.proxy.registerItemRenderer(Item.getItemFromBlock(this), 0, "inventory");
     }
 
     private Item createItemBlock() {

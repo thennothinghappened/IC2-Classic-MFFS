@@ -6,19 +6,17 @@ item.mffs.mfd.offset.name=MFDevice <Offset>
 item.mffs.projector_base.name=Forcefield projector base
 
 tile.mffs.core.name=Forcefield core
-tile.mffs.proj.area.name=MFFS Area projector
-# tile.mffs.proj.line.name=Forcefield Line projector
-# tile.mffs.proj.plate.name=Forcefield Plate projector
-tile.mffs.proj.tube.name=Forcefield Tube projector
-tile.mffs.proj.deflector.name=MFFS deflector
-tile.mffs.proj.extender.name=Forcefield directional extender
-tile.mffs.upgrade.underwater.name=Forcefield underwater upgrade
-tile.mffs.upgrade.dome.name=Forcefield dome upgrade
-tile.mffs.upgrade.breaker.name=Forcefield block cutter upgrade
-tile.mffs.upgrade.core.storage.name=Forcefield core storage upgrade
-tile.mffs.upgrade.core.range.name=Forcefield core range upgrade
-tile.mffs.upgrade.zapper.name=Forcefield zapper upgrade
-tile.mffs.upgrade.camo.name=Forcefield camouflage upgrade
+tile.mffs.proj_area.name=MFFS Area projector
+tile.mffs.proj_tube.name=Forcefield Tube projector
+tile.mffs.proj_deflector.name=MFFS deflector
+tile.mffs.proj_extender.name=Forcefield directional extender
+tile.mffs.upgrade_underwater.name=Forcefield underwater upgrade
+tile.mffs.upgrade_dome.name=Forcefield dome upgrade
+tile.mffs.upgrade_breaker_name=Forcefield block cutter upgrade
+tile.mffs.upgrade_core_storage.name=Forcefield core storage upgrade
+tile.mffs.upgrade_core_range.name=Forcefield core range upgrade
+tile.mffs.upgrade_zapper.name=Forcefield zapper upgrade
+tile.mffs.upgrade_camo.name=Forcefield camouflage upgrade
 
 tile.mffs.beam.name=Wireless data beam
 

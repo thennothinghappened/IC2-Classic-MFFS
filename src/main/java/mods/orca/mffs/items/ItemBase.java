@@ -1,11 +1,9 @@
 package mods.orca.mffs.items;
 
-import mods.orca.mffs.MFFSMod;
 import mods.orca.mffs.client.MFFSTab;
-import mods.orca.mffs.util.IHasModel;
 import net.minecraft.item.Item;
 
-public class ItemBase extends Item implements IHasModel {
+public class ItemBase extends Item {
 
     protected String name;
 
@@ -22,10 +20,5 @@ public class ItemBase extends Item implements IHasModel {
 
     public ItemBase(String name) {
         this(name, true);
-    }
-
-    @Override
-    public void registerItemModel() {
-        MFFSMod.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

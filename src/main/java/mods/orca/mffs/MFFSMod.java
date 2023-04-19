@@ -2,12 +2,13 @@ package mods.orca.mffs;
 
 import mods.orca.mffs.proxy.Proxy;
 import mods.orca.mffs.recipe.ModRecipes;
-import net.minecraft.init.Blocks;
+import mods.orca.mffs.util.handlers.ModGuiHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = MFFSMod.MODID, name = MFFSMod.NAME, version = MFFSMod.VERSION, dependencies = "required-after:ic2")
@@ -34,6 +35,8 @@ public class MFFSMod {
     {
         logger = event.getModLog();
         logger.info("Loading " + NAME);
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
     }
 
     @Mod.EventHandler
