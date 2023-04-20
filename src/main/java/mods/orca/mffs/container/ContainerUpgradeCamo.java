@@ -11,10 +11,10 @@ public class ContainerUpgradeCamo extends ContainerPlayerInvBase {
 
     public ContainerUpgradeCamo(InventoryPlayer inventoryPlayer, final TileUpgradeCamo upgradeCamo) {
 
-        super(inventoryPlayer);
+        super(inventoryPlayer, 58);
 
         IItemHandler inventory = upgradeCamo.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
-        addSlotToContainer(new SlotItemHandler(inventory, 0, 80, 35) {
+        addSlotToContainer(new SlotItemHandler(inventory, 0, 80, 22) {
             @Override
             public void onSlotChanged() {
                 upgradeCamo.markDirty();

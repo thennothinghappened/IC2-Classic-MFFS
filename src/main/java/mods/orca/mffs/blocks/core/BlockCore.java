@@ -1,8 +1,10 @@
 package mods.orca.mffs.blocks.core;
 
+import mods.orca.mffs.MFFSMod;
 import mods.orca.mffs.blocks.base.BlockUpgradableMachine;
 import mods.orca.mffs.items.ItemFreqcard;
 import mods.orca.mffs.items.ModItems;
+import mods.orca.mffs.util.handlers.ModGuiHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -38,7 +40,7 @@ public class BlockCore extends BlockUpgradableMachine<TileCore> {
      * @return A 'burnt' MFFS card that points to this block position to put into a projector.
      */
     @Nullable
-    private ItemStack burnMFFSCard(ItemStack stack, BlockPos pos) {
+    public ItemStack burnMFFSCard(ItemStack stack, BlockPos pos) {
         if (stack.isEmpty()) {
             return null;
         }
@@ -48,7 +50,7 @@ public class BlockCore extends BlockUpgradableMachine<TileCore> {
         }
 
         ItemStack burnt = new ItemStack(ModItems.FREQCARD, stack.getCount(), 0);
-        NBTTagCompound nbt = burnt.getTagCompound();
+        NBTTagCompound nbt = new NBTTagCompound();
 
         nbt.setIntArray(ItemFreqcard.KEY_CORE_POS, new int[]{pos.getX(), pos.getY(), pos.getZ()});
 
@@ -60,17 +62,21 @@ public class BlockCore extends BlockUpgradableMachine<TileCore> {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
+        if (worldIn.isRemote) {
+            return true;
+        }
+
         ItemStack heldItem = playerIn.getHeldItem(hand);
         ItemStack burntCards = burnMFFSCard(heldItem, pos);
 
         // they clicked with a blank MFFS card, so lets give them burnt one(s)
         if (burntCards != null) {
-            if (!worldIn.isRemote) {
-                playerIn.setHeldItem(hand, burntCards);
-            }
+            playerIn.setHeldItem(hand, burntCards);
             return true;
         }
 
-        return false;
+        playerIn.openGui(MFFSMod.instance, ModGuiHandler.CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+
+        return true;
     }
 }

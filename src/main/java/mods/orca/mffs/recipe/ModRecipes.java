@@ -9,12 +9,22 @@ import net.minecraft.item.ItemStack;
 
 public class ModRecipes {
     public static void init() {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                Items                                                //
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         ClassicRecipes.advCrafting.addRecipe(new ItemStack(ModItems.FREQCARD_BLANK),
                 "PPP",
-                        "PCP",
-                        "PPP",
+                "PCP",
+                "PPP",
                 'P', Items.PAPER, 'C', IC2Items.getItem("crafting", "circuit"));
 
+        // Convert a card back to a blank
+        ClassicRecipes.advCrafting.addShapelessRecipe(new ItemStack(ModItems.FREQCARD_BLANK), new ItemStack(ModItems.FREQCARD));
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                Blocks                                               //
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         ClassicRecipes.advCrafting.addRecipe(new ItemStack(ModBlocks.CORE),
                 "WAW",
                 "CFC",

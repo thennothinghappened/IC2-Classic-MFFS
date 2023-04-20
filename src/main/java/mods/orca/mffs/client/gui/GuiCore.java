@@ -14,6 +14,8 @@ public class GuiCore extends GuiHasPlayerInv {
 
     public GuiCore(Container container, InventoryPlayer inventoryPlayer) {
         super(container, inventoryPlayer, new ResourceLocation(MFFSMod.MODID, "textures/gui/projector.png"));
+
+        ySize = 224;
     }
 
     @Override

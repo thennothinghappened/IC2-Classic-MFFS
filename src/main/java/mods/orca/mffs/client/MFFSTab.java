@@ -15,6 +15,6 @@ public class MFFSTab extends CreativeTabs {
 
     @Override
     public ItemStack getTabIconItem() {
-        return new ItemStack(ModItems.FREQCARD_BLANK);
+        return new ItemStack(ModItems.FREQCARD);
     }
 }

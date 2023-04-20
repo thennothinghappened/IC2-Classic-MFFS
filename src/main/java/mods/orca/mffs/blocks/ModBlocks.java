@@ -14,7 +14,7 @@ public class ModBlocks {
 
     public static final List<Block> BLOCKS = new ArrayList<>();
 
-    public static final Block FORCEFIELD = new BlockForcefield();
-    public static final Block CORE = new BlockCore();
-    public static final Block UPGRADE_CAMOFLAGE = new BlockUpgradeCamo();
+    public static final BlockForcefield FORCEFIELD = new BlockForcefield();
+    public static final BlockCore CORE = new BlockCore();
+    public static final BlockUpgradeCamo UPGRADE_CAMOFLAGE = new BlockUpgradeCamo();
 }

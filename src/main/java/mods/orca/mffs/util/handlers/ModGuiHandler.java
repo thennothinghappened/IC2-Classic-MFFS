@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.orca.mffs.blocks.core.TileCore;
 import mods.orca.mffs.blocks.upgrades.camoflage.TileUpgradeCamo;
+import mods.orca.mffs.client.gui.GuiCore;
 import mods.orca.mffs.client.gui.GuiUpgradeCamo;
 import mods.orca.mffs.container.ContainerCore;
 import mods.orca.mffs.container.ContainerUpgradeCamo;
@@ -39,6 +40,8 @@ public class ModGuiHandler implements IGuiHandler {
     @SideOnly(Side.CLIENT)
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         switch (ID) {
+            case CORE:
+                return new GuiCore(getServerGuiElement(ID, player, world, x, y, z), player.inventory);
             case CAMOFLAGE_UPGRADE:
                 return new GuiUpgradeCamo(getServerGuiElement(ID, player, world, x, y, z), player.inventory);
             default:
