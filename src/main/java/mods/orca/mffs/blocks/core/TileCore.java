@@ -1,10 +1,10 @@
 package mods.orca.mffs.blocks.core;
 
 import mods.orca.mffs.blocks.base.tile.TileUpgradableMachine;
+import mods.orca.mffs.blocks.upgrades.ICoreUpgrade;
+import mods.orca.mffs.blocks.upgrades.IUpgrade;
 import mods.orca.mffs.items.ModItems;
-import mods.orca.mffs.util.BlockUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -12,6 +12,8 @@ import javax.annotation.Nonnull;
 public class TileCore extends TileUpgradableMachine {
 
     public TileCore() {
+        super(10000000);
+
         inventory = new ItemStackHandler(1) {
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -27,12 +29,12 @@ public class TileCore extends TileUpgradableMachine {
     }
 
     @Override
-    public double getDemandedEnergy() {
-        return 10000000;
+    public int getSinkTier() {
+        return 3;
     }
 
     @Override
-    public int getSinkTier() {
-        return 3;
+    protected boolean upgradeCompatible(IUpgrade upgrade) {
+        return upgrade instanceof ICoreUpgrade;
     }
 }

@@ -1,3 +1,4 @@
+#PARSE_ESCAPES
 item.mffs.debugger.name=MFDevice <Debugger>
 item.mffs.freqcard_blank.name=Blank MFFS card
 item.mffs.freqcard.name=MFFS frequency card
@@ -18,7 +19,13 @@ tile.mffs.upgrade_core_range.name=Forcefield core range upgrade
 tile.mffs.upgrade_zapper.name=Forcefield zapper upgrade
 tile.mffs.upgrade_camo.name=Forcefield camouflage upgrade
 
-tile.mffs.beam.name=Wireless data beam
+container.mffs.core.name=MFFS Generator Core
+container.mffs.core.label.storage.name=Force Power\nstorage
+container.mffs.core.label.range.name=transmit range:
+container.mffs.core.label.linked_projectors.name=linked projektor:
+container.mffs.core.label.freq_slot.name=Frequency Card:
+
+container.mffs.upgrade_camo.name=MFFD Camouflaage Upgrade
 
 death.attack.MFFSteslacoil=%1$s was zapped
 death.attack.MFFSteslacoil.player=%1$s was zapped while trying to escape %1$s

@@ -10,28 +10,73 @@ import mods.orca.mffs.MFFSMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.EnumPacketDirection;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public abstract class TileMachine extends TileEntity implements IMachine, IEnergySink {
     private double energyStored = 0;
+    public final double maxEnergy;
+
+    private boolean hasChanged = false;
     protected boolean active = false;
+
+    private static final String ENERGY_STORED_KEY = "energyStored";
+
+    public TileMachine(double maxEnergy) {
+        super();
+        this.maxEnergy = maxEnergy;
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setDouble("energyStored", energyStored);
+        compound.setDouble(ENERGY_STORED_KEY, energyStored);
         return super.writeToNBT(compound);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        energyStored = compound.getDouble("energyStored");
+        energyStored = compound.getDouble(ENERGY_STORED_KEY);
         super.readFromNBT(compound);
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        if (!hasChanged) {
+            return null;
+        }
+
+        hasChanged = false;
+        return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), getUpdateTag());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound compound = super.getUpdateTag();
+        compound.setDouble(ENERGY_STORED_KEY, energyStored);
+
+        return compound;
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        if (net.getDirection() == EnumPacketDirection.CLIENTBOUND) {
+            // the server should never be receiving power updates from a client
+            // only the client will get updates from the server.
+            NBTTagCompound compound = pkt.getNbtCompound();
+            if (compound.hasKey(ENERGY_STORED_KEY)) {
+                energyStored = compound.getDouble(ENERGY_STORED_KEY);
+            }
+        }
     }
 
     @Override
@@ -41,7 +86,13 @@ public abstract class TileMachine extends TileEntity implements IMachine, IEnerg
 
     @Override
     public boolean useEnergy(double amount, boolean simulate) {
-        return false;
+        boolean canDoThat = energyStored - amount >= 0;
+
+        if (!simulate && canDoThat) {
+            changeEnergy(energyStored - amount);
+        }
+
+        return canDoThat;
     }
 
     @Override
@@ -79,8 +130,18 @@ public abstract class TileMachine extends TileEntity implements IMachine, IEnerg
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
-        energyStored += amount;
-        return Math.max(energyStored - getDemandedEnergy(), 0);
+        changeEnergy(energyStored + amount);
+        return Math.max(energyStored - maxEnergy, 0);
+    }
+
+    @Override
+    public double getDemandedEnergy() {
+        return Math.max(maxEnergy - energyStored, 0);
+    }
+
+    protected void changeEnergy(double newValue) {
+        energyStored = newValue;
+        hasChanged = true;
     }
 
     @Override

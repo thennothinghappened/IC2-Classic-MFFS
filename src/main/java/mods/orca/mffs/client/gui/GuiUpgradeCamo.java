@@ -6,6 +6,7 @@ import mods.orca.mffs.MFFSMod;
 import mods.orca.mffs.blocks.ModBlocks;
 import mods.orca.mffs.client.gui.base.GuiHasPlayerInv;
 import mods.orca.mffs.container.ContainerPlayerInvBase;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
@@ -19,6 +20,6 @@ public class GuiUpgradeCamo extends GuiHasPlayerInv {
 
     @Override
     protected String getDisplayName() {
-        return ModBlocks.UPGRADE_CAMOFLAGE.getLocalizedName();
+        return "upgrade_camo";
     }
 }

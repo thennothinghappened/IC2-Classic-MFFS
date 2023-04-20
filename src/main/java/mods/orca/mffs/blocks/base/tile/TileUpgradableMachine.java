@@ -20,6 +20,10 @@ public abstract class TileUpgradableMachine extends TileMachine {
     public List<IUpgrade> upgrades = new ArrayList<>();
     protected ItemStackHandler inventory;
 
+    public TileUpgradableMachine(double maxEnergy) {
+        super(maxEnergy);
+    }
+
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound.setTag("inventory", inventory.serializeNBT());
         return super.writeToNBT(compound);
@@ -61,7 +65,7 @@ public abstract class TileUpgradableMachine extends TileMachine {
             }
 
             // is it compatible with this machine?
-            if (!((IUpgrade) te).compatible(this)) {
+            if (!upgradeCompatible((IUpgrade) te)) {
                 continue;
             }
 
@@ -79,6 +83,8 @@ public abstract class TileUpgradableMachine extends TileMachine {
     protected void activateUpgrades() {
         upgrades.forEach(upgrade -> upgrade.setActive(true));
     }
+
+    protected abstract boolean upgradeCompatible(IUpgrade upgrade);
 
 
 }
