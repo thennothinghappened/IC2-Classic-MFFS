@@ -14,7 +14,7 @@ public class ModBlocks {
 
     public static final List<Block> BLOCKS = new ArrayList<>();
 
-    public static final Block FORCEFIELD = new BlockBase("forcefield", Material.GLASS).setBlockLayer(BlockRenderLayer.CUTOUT).setBlockUnbreakable();
+    public static final Block FORCEFIELD = new BlockForcefield();
     public static final Block CORE = new BlockCore();
     public static final Block UPGRADE_CAMOFLAGE = new BlockUpgradeCamo();
 }

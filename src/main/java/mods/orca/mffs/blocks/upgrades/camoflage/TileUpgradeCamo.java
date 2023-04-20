@@ -3,7 +3,7 @@ package mods.orca.mffs.blocks.upgrades.camoflage;
 import mods.orca.mffs.blocks.base.tile.TileHasInventory;
 import mods.orca.mffs.blocks.base.tile.TileUpgradableMachine;
 import mods.orca.mffs.blocks.upgrades.IUpgrade;
-import net.minecraft.item.ItemBlock;
+import mods.orca.mffs.util.BlockUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -16,7 +16,7 @@ public class TileUpgradeCamo extends TileHasInventory implements IUpgrade {
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 // we only want blocks, no point trying to camo an item.
-                return stack.getItem() instanceof ItemBlock;
+                return BlockUtils.isValidCamo(stack);
             }
 
             @Nonnull

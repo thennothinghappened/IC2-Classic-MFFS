@@ -7,6 +7,7 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import mods.orca.mffs.MFFSMod;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -75,25 +76,30 @@ public abstract class TileMachine extends TileEntity implements IMachine, IEnerg
 
     @Override
     public void invalidate() {
-        dt(false);
+        logLoadedTest(false);
         MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.invalidate();
     }
 
     @Override
     public void onChunkUnload() {
-        dt(false);
+        logLoadedTest(false);
         MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         super.onChunkUnload();
     }
 
     @Override
     public void onLoad() {
-        dt(true);
+        logLoadedTest(true);
         MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
     }
 
-    private void dt(boolean l) {
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
+    }
+
+    private void logLoadedTest(boolean l) {
         MFFSMod.logger.info((l ? "loaded" : "unloaded") + (world.isRemote ? " on client" : " on server"));
     }
 }

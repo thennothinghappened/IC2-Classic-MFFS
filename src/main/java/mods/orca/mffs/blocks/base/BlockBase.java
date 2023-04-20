@@ -15,7 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockBase extends Block {
 
     protected String name;
-    private BlockRenderLayer blockRenderLayer = BlockRenderLayer.SOLID;
 
     public BlockBase(String name, Material material, Boolean setCreativeTab) {
         super(material);
@@ -37,29 +36,6 @@ public class BlockBase extends Block {
     public BlockBase setRegisterItem() {
         ModItems.ITEMS.add(createItemBlock());
         return this;
-    }
-
-    public BlockBase setBlockLayer(BlockRenderLayer blockRenderLayer) {
-        this.blockRenderLayer = blockRenderLayer;
-        return this;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
-        return blockRenderLayer;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isOpaqueCube(IBlockState state) {
-        return blockRenderLayer == BlockRenderLayer.SOLID;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isFullCube(IBlockState state) {
-        return isOpaqueCube(state);
     }
 
     private Item createItemBlock() {
