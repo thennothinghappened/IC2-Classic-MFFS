@@ -9,6 +9,7 @@ import ic2.api.energy.tile.IEnergySink;
 import mods.orca.mffs.MFFSMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +20,19 @@ import java.util.Set;
 
 public abstract class TileMachine extends TileEntity implements IMachine, IEnergySink {
     private double energyStored = 0;
+    protected boolean active = false;
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setDouble("energyStored", energyStored);
+        return super.writeToNBT(compound);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        energyStored = compound.getDouble("energyStored");
+        super.readFromNBT(compound);
+    }
 
     @Override
     public double getEnergy() {

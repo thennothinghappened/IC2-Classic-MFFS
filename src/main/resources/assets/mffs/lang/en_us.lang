@@ -1,6 +1,6 @@
 item.mffs.debugger.name=MFDevice <Debugger>
 item.mffs.freqcard_blank.name=Blank MFFS card
-item.mffs.freqcard.name=Forcefield frequency card
+item.mffs.freqcard.name=MFFS frequency card
 item.mffs.mfd.offset.name=MFDevice <Offset>
 
 item.mffs.projector_base.name=Forcefield projector base
