@@ -3,7 +3,6 @@ package mods.orca.mffs.blocks.upgrades.camoflage;
 import mods.orca.mffs.blocks.base.tile.TileHasInventory;
 import mods.orca.mffs.blocks.base.tile.TileUpgradableMachine;
 import mods.orca.mffs.blocks.projector.TileProjector;
-import mods.orca.mffs.blocks.upgrades.IUpgrade;
 import mods.orca.mffs.util.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;

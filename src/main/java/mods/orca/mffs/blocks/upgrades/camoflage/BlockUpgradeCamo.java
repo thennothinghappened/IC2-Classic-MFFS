@@ -2,27 +2,22 @@ package mods.orca.mffs.blocks.upgrades.camoflage;
 
 import mods.orca.mffs.MFFSMod;
 import mods.orca.mffs.blocks.base.BlockMachine;
+import mods.orca.mffs.blocks.upgrades.IBlockUpgrade;
 import mods.orca.mffs.util.handlers.ModGuiHandler;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
-public class BlockUpgradeCamo extends BlockMachine<TileUpgradeCamo> {
+public class BlockUpgradeCamo extends BlockMachine<TileUpgradeCamo> implements IBlockUpgrade {
     public BlockUpgradeCamo() {
         super("upgrade_camo");
     }

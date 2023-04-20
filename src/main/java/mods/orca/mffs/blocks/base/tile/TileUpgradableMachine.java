@@ -1,5 +1,6 @@
 package mods.orca.mffs.blocks.base.tile;
 
+import mods.orca.mffs.MFFSMod;
 import mods.orca.mffs.blocks.upgrades.IUpgrade;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -47,12 +48,14 @@ public abstract class TileUpgradableMachine extends TileMachine {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)inventory : super.getCapability(capability, facing);
     }
 
-    public void findUpgrades(World world, BlockPos thisPos) {
+    public void findUpgrades() {
+        MFFSMod.logger.info("Looking for upgrades...");
+
         deactivateUpgrades();
         upgrades.clear();
 
         for (EnumFacing direction : EnumFacing.VALUES) {
-            TileEntity te = world.getTileEntity(thisPos.offset(direction));
+            TileEntity te = world.getTileEntity(pos.offset(direction));
 
             // check valid first
             if (te == null || te.isInvalid()) {
@@ -69,11 +72,17 @@ public abstract class TileUpgradableMachine extends TileMachine {
                 continue;
             }
 
+            // does the upgrade already have an owner?
+            if (((IUpgrade) te).getOwner() != null && ((IUpgrade) te).getOwner() != this) {
+                continue;
+            }
+
+            MFFSMod.logger.info("Found upgrade " + te);
+
             // add it to our list of upgrades
+            ((IUpgrade) te).setOwner(this);
             upgrades.add((IUpgrade) te);
         }
-
-        activateUpgrades();
     }
 
     private void deactivateUpgrades() {
@@ -86,5 +95,21 @@ public abstract class TileUpgradableMachine extends TileMachine {
 
     protected abstract boolean upgradeCompatible(IUpgrade upgrade);
 
+    @Nullable
+    protected <T extends IUpgrade> T getUpgrade(Class<T> type) {
+        for (IUpgrade upgrade : upgrades) {
+            // if something has been invalidated without us knowing, e.g. setblock!
+            if (((TileEntity) upgrade).isInvalid()) {
+                findUpgrades();
+                return getUpgrade(type);
+            }
+
+            if (type.isInstance(upgrade)) {
+                return (T) upgrade;
+            }
+        }
+
+        return null;
+    }
 
 }

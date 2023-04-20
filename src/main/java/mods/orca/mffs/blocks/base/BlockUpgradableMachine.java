@@ -22,7 +22,14 @@ public abstract class BlockUpgradableMachine<TE extends TileUpgradableMachine> e
     public abstract TE createTileEntity(World world, IBlockState state);
 
     @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        getTileEntity(worldIn, pos).findUpgrades();
+    }
+
+    @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos thisPos, Block fromBlock, BlockPos fromPos) {
-        getTileEntity(worldIn, thisPos).findUpgrades(worldIn, thisPos);
+        if (!worldIn.isRemote) {
+            getTileEntity(worldIn, thisPos).findUpgrades();
+        }
     }
 }

@@ -2,11 +2,13 @@ package mods.orca.mffs.blocks.core;
 
 import mods.orca.mffs.MFFSMod;
 import mods.orca.mffs.blocks.base.BlockUpgradableMachine;
+import mods.orca.mffs.blocks.upgrades.IBlockUpgrade;
 import mods.orca.mffs.items.ItemFreqcard;
 import mods.orca.mffs.items.ModItems;
 import mods.orca.mffs.util.handlers.ModGuiHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -62,17 +64,22 @@ public class BlockCore extends BlockUpgradableMachine<TileCore> {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
-        if (worldIn.isRemote) {
-            return true;
-        }
-
         ItemStack heldItem = playerIn.getHeldItem(hand);
         ItemStack burntCards = burnMFFSCard(heldItem, pos);
 
         // they clicked with a blank MFFS card, so lets give them burnt one(s)
         if (burntCards != null) {
-            playerIn.setHeldItem(hand, burntCards);
+            if (!worldIn.isRemote) {
+                playerIn.setHeldItem(hand, burntCards);
+            }
             return true;
+        }
+
+        // if the player is trying to place an upgrade, don't get in the way
+        if (heldItem.getItem() instanceof ItemBlock) {
+            if (((ItemBlock) heldItem.getItem()).getBlock() instanceof IBlockUpgrade) {
+                return false;
+            }
         }
 
         playerIn.openGui(MFFSMod.instance, ModGuiHandler.CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());

@@ -5,7 +5,6 @@ import mods.orca.mffs.blocks.base.tile.TileUpgradableMachine;
 import mods.orca.mffs.blocks.core.TileCore;
 import mods.orca.mffs.blocks.upgrades.IProjectorUpgrade;
 import mods.orca.mffs.blocks.upgrades.IUpgrade;
-import mods.orca.mffs.blocks.upgrades.camoflage.ICamoUpgrade;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 

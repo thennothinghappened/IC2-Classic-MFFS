@@ -35,12 +35,6 @@ public abstract class BlockMachine<TE extends TileEntity> extends BlockTileEntit
     @Override
     public abstract TE createTileEntity(World world, IBlockState state);
 
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        worldIn.notifyNeighborsOfStateChange(pos, this, false);
-        super.onBlockAdded(worldIn, pos, state);
-    }
-
     // none of our machines have a direction
     @Override
     public EnumFacing getFacing(World world, BlockPos pos) {
