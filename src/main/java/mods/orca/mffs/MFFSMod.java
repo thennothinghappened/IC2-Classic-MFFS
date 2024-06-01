@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
+import static mods.orca.mffs.KotlinTestKt.kotlinTest;
+
 @Mod(modid = MFFSMod.MODID, name = MFFSMod.NAME, version = MFFSMod.VERSION, dependencies = "required-after:ic2")
 public class MFFSMod {
     public static final String MODID = "mffs";
@@ -35,6 +37,8 @@ public class MFFSMod {
     {
         logger = event.getModLog();
         logger.info("Loading " + NAME);
+
+        kotlinTest(logger);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
     }
