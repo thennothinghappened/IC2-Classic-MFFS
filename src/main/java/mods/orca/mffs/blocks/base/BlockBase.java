@@ -24,7 +24,7 @@ public class BlockBase extends Block {
         setTranslationKey("mffs." + name);
         setRegistryName(name);
 
-        if (setCreativeTab) setCreativeTab(MFFSTab.mffsTab);
+        if (setCreativeTab) setCreativeTab(MFFSTab.INSTANCE);
 
         ModBlocks.BLOCKS.add(this);
     }

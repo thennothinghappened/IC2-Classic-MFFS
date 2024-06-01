@@ -13,7 +13,7 @@ public class ItemBase extends Item {
         setTranslationKey("mffs." + name);
         setRegistryName(name);
 
-        if (setCreativeTab) setCreativeTab(MFFSTab.mffsTab);
+        if (setCreativeTab) setCreativeTab(MFFSTab.INSTANCE);
 
         ModItems.ITEMS.add(this);
     }
