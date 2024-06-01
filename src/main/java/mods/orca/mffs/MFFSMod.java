@@ -11,7 +11,13 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = MFFSMod.MODID, name = MFFSMod.NAME, version = MFFSMod.VERSION, dependencies = "required-after:ic2")
+@Mod(
+        modid = MFFSMod.MODID,
+        name = MFFSMod.NAME,
+        version = MFFSMod.VERSION,
+        dependencies = "required-after:ic2",
+        useMetadata = true
+)
 public class MFFSMod {
     public static final String MODID = "mffs";
     public static final String NAME = "Modular Force Field System";
