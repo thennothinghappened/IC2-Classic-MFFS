@@ -10,6 +10,6 @@ pluginManagement {
 }
 
 plugins {
-    id("net.minecraftforge.gradle") version "5.1.76" apply false
+    id("net.minecraftforge.gradle") version "6.0.+" apply false
     kotlin("jvm") version "1.9.23" apply false
 }
