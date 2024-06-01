@@ -3,16 +3,21 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
-
-repositories {
-    mavenCentral()
-    maven("https://cursemaven.com")
-}
-
 plugins {
     id("net.minecraftforge.gradle")
     kotlin("jvm")
+}
+
+repositories {
+    mavenCentral()
+    exclusiveContent {
+        forRepository {
+            maven("https://cursemaven.com")
+        }
+        filter {
+            includeGroup("curse.maven")
+        }
+    }
 }
 
 version = "1.0.0"
@@ -46,10 +51,11 @@ configure<UserDevExtension> {
 
 dependencies {
 
-    "minecraft"("net.minecraftforge:forge:1.12.2-14.23.5.2859")
+    minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2859")
 
-    "implementation"("net.minecraftforge:mergetool:0.2.3.3") // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
-    "implementation"("curse.maven:ic2_classic-242942:4476676")
+    // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
+    implementation("net.minecraftforge:mergetool:0.2.3.3")
+    implementation("curse.maven:ic2_classic-242942:4476676")
 
 }
 
@@ -70,4 +76,8 @@ tasks.withType<Jar> {
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ"))
     }
 
+}
+
+sourceSets.all {
+    output.setResourcesDir(output.classesDirs.files.iterator().next())
 }
