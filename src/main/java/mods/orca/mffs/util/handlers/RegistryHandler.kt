@@ -9,10 +9,15 @@ import net.minecraft.item.Item
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.fml.common.registry.GameRegistry
-import java.util.function.Consumer
 
+/**
+ * Handler to register our set of blocks and items and so forth with Forge.
+ */
 object RegistryHandler {
 
+    /**
+     * Register our list of items.
+     */
     @JvmStatic
     fun onItemRegister(event: RegistryEvent.Register<Item>) {
         ModItems.ITEMS.forEach {
@@ -20,6 +25,9 @@ object RegistryHandler {
         }
     }
 
+    /**
+     * Register our list of blocks.
+     */
     @JvmStatic
     fun onBlockRegister(event: RegistryEvent.Register<Block>) {
 
@@ -33,6 +41,9 @@ object RegistryHandler {
 
     }
 
+    /**
+     * Register model renderers for our items and blocks.
+     */
     @JvmStatic
     fun onModelRegister(event: ModelRegistryEvent) {
 

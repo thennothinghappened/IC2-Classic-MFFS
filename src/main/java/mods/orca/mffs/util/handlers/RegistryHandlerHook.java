@@ -7,6 +7,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * Hook into the Event Bus that forwards on to Kotlin registry events to set up the mod's items and whatnot.
+ */
 @Mod.EventBusSubscriber
 public class RegistryHandlerHook {
 
