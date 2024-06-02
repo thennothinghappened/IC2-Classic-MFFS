@@ -3,16 +3,11 @@ package mods.orca.mffs.client.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.orca.mffs.MFFSMod;
-import mods.orca.mffs.blocks.ModBlocks;
 import mods.orca.mffs.client.gui.base.GuiHasPlayerInv;
 import mods.orca.mffs.container.ContainerCore;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.Arrays;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiCore extends GuiHasPlayerInv {
@@ -36,7 +31,7 @@ public class GuiCore extends GuiHasPlayerInv {
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
         // Draw the power meter
-        Double power = (70 * ((ContainerCore)inventorySlots).getPowerPercentage());
+        Double power = (70 * ((ContainerCore)inventorySlots).getEnergyPercent());
         drawTexturedModalRect(drawPosX(powerMeterX), drawPosY(powerMeterY), 176, 0, power.intValue(), 13);
     }
 
@@ -46,7 +41,7 @@ public class GuiCore extends GuiHasPlayerInv {
 
         // Draw power meter accompanying value
         ContainerCore container = (ContainerCore) inventorySlots;
-        String power = Integer.toString(((Double) container.getPower()).intValue());
+        String power = Integer.toString(((Double) container.getEnergy()).intValue());
 
         fontRenderer.drawString(
                 power,
