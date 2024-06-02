@@ -51,7 +51,14 @@ public class BlockUpgradeCamo extends BlockMachine<TileUpgradeCamo> implements I
             }
             tile.markDirty();
         } else {
-            playerIn.openGui(MFFSMod.instance, ModGuiHandler.CAMOFLAGE_UPGRADE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(
+                MFFSMod.instance,
+                ModGuiHandler.GuiId.CamouflageUpgrade.ordinal(),
+                worldIn,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ())
+            ;
         }
 
         return true;

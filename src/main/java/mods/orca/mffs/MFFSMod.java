@@ -28,11 +28,8 @@ public class MFFSMod {
     public static MFFSMod instance;
 
     public MFFSMod() {
-
         instance = this;
-
         MinecraftForge.EVENT_BUS.register(RegistryHandler.class);
-
     }
 
     @SidedProxy(

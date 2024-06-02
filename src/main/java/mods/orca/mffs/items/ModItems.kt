@@ -8,9 +8,9 @@ object ModItems {
     val ITEMS: MutableList<Item> = ArrayList()
 
     @JvmField
-    val FREQCARD_BLANK: Item = ItemBase("freqcard_blank")
+    val FREQCARD_BLANK = ItemBase("freqcard_blank")
 
     @JvmField
-    val FREQCARD: Item = ItemFreqcard()
+    val FREQCARD = ItemFreqcard()
 
 }

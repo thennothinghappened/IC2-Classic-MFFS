@@ -13,24 +13,30 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerCore extends ContainerPlayerInvBase {
 
-    private TileCore core;
+    private final TileCore core;
 
-    public ContainerCore(InventoryPlayer inventoryPlayer, final TileCore core) {
+    public ContainerCore(
+        @NotNull InventoryPlayer inventoryPlayer,
+        @NotNull final TileCore core
+    ) {
 
         super(inventoryPlayer, 142);
-
         this.core = core;
 
         IItemHandler inventory = core.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+
         addSlotToContainer(new SlotItemHandler(inventory, 0, 97, 120) {
+
             @Override
             public void onSlotChanged() {
                 if (getHasStack()) {
-                    // they've put an MFFS card in.
-                    // we run on server and client as otherwise client doesn't know it changed until we pull it out again.
+
+                    // They've put an MFFS card in.
+                    // We run on server and client as otherwise client doesn't know it changed until we pull it out again.
                     ItemStack burnt = ModBlocks.CORE.burnMFFSCard(getStack(), core.getPos());
 
                     if (burnt != null) {
@@ -40,7 +46,9 @@ public class ContainerCore extends ContainerPlayerInvBase {
 
                 core.markDirty();
             }
+
         });
+
     }
 
     @Override

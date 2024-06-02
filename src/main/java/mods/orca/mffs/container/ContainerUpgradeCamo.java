@@ -6,10 +6,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerUpgradeCamo extends ContainerPlayerInvBase {
 
-    public ContainerUpgradeCamo(InventoryPlayer inventoryPlayer, final TileUpgradeCamo upgradeCamo) {
+    public ContainerUpgradeCamo(
+        @NotNull InventoryPlayer inventoryPlayer,
+        @NotNull final TileUpgradeCamo upgradeCamo
+    ) {
 
         super(inventoryPlayer, 58);
 

@@ -82,7 +82,7 @@ public class BlockCore extends BlockUpgradableMachine<TileCore> {
             }
         }
 
-        playerIn.openGui(MFFSMod.instance, ModGuiHandler.CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        playerIn.openGui(MFFSMod.instance, ModGuiHandler.GuiId.Core.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 
         return true;
     }
