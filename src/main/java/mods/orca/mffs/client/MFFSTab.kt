@@ -5,7 +5,7 @@ import mods.orca.mffs.items.ModItems
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 
-object MFFSTab : CreativeTabs(MFFSMod.MODID) {
+object MFFSTab : CreativeTabs(MFFSMod.modId) {
 
     override fun createIcon(): ItemStack {
         return ItemStack(ModItems.FREQCARD)

@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiUpgradeCamo extends GuiHasPlayerInv {
 
     public GuiUpgradeCamo(Container container, InventoryPlayer inventoryPlayer) {
-        super(container, inventoryPlayer, new ResourceLocation(MFFSMod.MODID, "textures/gui/camoflage_upgrade.png"));
+        super(container, inventoryPlayer, new ResourceLocation(MFFSMod.modId, "textures/gui/camoflage_upgrade.png"));
     }
 
     @Override

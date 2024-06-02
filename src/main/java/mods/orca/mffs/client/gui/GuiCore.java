@@ -21,7 +21,7 @@ public class GuiCore extends GuiHasPlayerInv {
     private static final int powerMeterY = 30;
 
     public GuiCore(Container container, InventoryPlayer inventoryPlayer) {
-        super(container, inventoryPlayer, new ResourceLocation(MFFSMod.MODID, "textures/gui/projector.png"));
+        super(container, inventoryPlayer, new ResourceLocation(MFFSMod.modId, "textures/gui/projector.png"));
 
         ySize = 224;
     }
