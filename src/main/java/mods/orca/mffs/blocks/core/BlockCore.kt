@@ -16,11 +16,7 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-class BlockCore : BlockUpgradableMachine<TileCore>("core") {
-
-    override fun getTileEntityClass(): Class<TileCore> {
-        return TileCore::class.java
-    }
+class BlockCore : BlockUpgradableMachine<TileCore>(TileCore::class.java, "core") {
 
     override fun createTileEntity(world: World, state: IBlockState): TileCore {
         MFFSMod.logger.debug("Created a new Core!")
@@ -55,10 +51,10 @@ class BlockCore : BlockUpgradableMachine<TileCore>("core") {
     }
 
     override fun onBlockActivated(
-        worldIn: World,
+        world: World,
         pos: BlockPos,
         state: IBlockState,
-        playerIn: EntityPlayer,
+        player: EntityPlayer,
         hand: EnumHand,
         facing: EnumFacing,
         hitX: Float,
@@ -66,26 +62,27 @@ class BlockCore : BlockUpgradableMachine<TileCore>("core") {
         hitZ: Float
     ): Boolean {
 
-        val heldItem = playerIn.getHeldItem(hand)
+        val heldItem = player.getHeldItem(hand)
         val burntCards = burnMFFSCard(heldItem, pos)
 
-        // they clicked with a blank MFFS card, so lets give them burnt one(s)
+        // They clicked with a blank MFFS card, lets give them burnt one(s).
         if (burntCards != null) {
-            if (!worldIn.isRemote) {
-                playerIn.setHeldItem(hand, burntCards)
+            if (!world.isRemote) {
+                player.setHeldItem(hand, burntCards)
             }
             return true
         }
 
-        // if the player is trying to place an upgrade, don't get in the way
+        // If the player is trying to place an upgrade, don't get in the way!
         if (heldItem.item is ItemBlock) {
             if ((heldItem.item as ItemBlock).block is IBlockUpgrade) {
                 return false
             }
         }
 
-        playerIn.openGui(MFFSMod.instance, ModGuiHandler.GuiId.Core.ordinal, worldIn, pos.x, pos.y, pos.z)
+        player.openGui(MFFSMod.instance, ModGuiHandler.GuiId.Core.ordinal, world, pos.x, pos.y, pos.z)
         return true
 
     }
+
 }
