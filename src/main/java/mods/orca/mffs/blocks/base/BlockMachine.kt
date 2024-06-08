@@ -12,23 +12,19 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.NonNullList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.function.Consumer
+import kotlin.reflect.KClass
 
 abstract class BlockMachine<TE : TileEntity>(
-    tileEntityClass: Class<TE>,
-    name: String
+    tileEntityClass: KClass<TE>
 ) : BlockTileEntity<TE>(
     tileEntityClass,
-    name,
-    Material.IRON,
-    true
+    Material.IRON
 ), IWrenchable {
 
     init {
         setHardness(3f)
         setResistance(50f)
         soundType = SoundType.METAL
-        setRegisterItem()
     }
 
     override fun getFacing(world: World, pos: BlockPos): EnumFacing {
@@ -48,19 +44,18 @@ abstract class BlockMachine<TE : TileEntity>(
         world: World,
         pos: BlockPos,
         state: IBlockState
-    ) {
-
-    }
+    ) {}
 
     // Add a chance for the machine to drop things like its internal inventory.
     override fun breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+
         val extraDrops = NonNullList.create<ItemStack>()
         getExtraDrops(extraDrops, world, pos, state)
 
-        extraDrops.forEach(Consumer { drop: ItemStack? ->
+        extraDrops.forEach { drop ->
             val item = EntityItem(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), drop)
             world.spawnEntity(item)
-        })
+        }
 
         super.breakBlock(world, pos, state)
     }
@@ -74,9 +69,11 @@ abstract class BlockMachine<TE : TileEntity>(
         player: EntityPlayer,
         fortune: Int
     ): List<ItemStack> {
+
         val drops = NonNullList.create<ItemStack>()
         getDrops(drops, world, pos, state, fortune)
 
         return drops
     }
+
 }

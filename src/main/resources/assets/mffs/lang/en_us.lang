@@ -1,7 +1,7 @@
 #PARSE_ESCAPES
 item.mffs.debugger.name=MFDevice <Debugger>
-item.mffs.freqcard_blank.name=Blank MFFS card
-item.mffs.freqcard.name=MFFS frequency card
+item.mffs.frequency_card_blank.name=Blank MFFS card
+item.mffs.frequency_card.name=MFFS frequency card
 item.mffs.mfd.offset.name=MFDevice <Offset>
 
 item.mffs.projector_base.name=Forcefield projector base

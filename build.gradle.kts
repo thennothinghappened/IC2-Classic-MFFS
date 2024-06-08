@@ -3,6 +3,9 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+version = "1.0.0"
+group = "orca.mods.mffs"
+
 plugins {
     id("net.minecraftforge.gradle")
     kotlin("jvm")
@@ -20,8 +23,22 @@ repositories {
     }
 }
 
-version = "1.0.0"
-group = "orca.mods.mffs"
+dependencies {
+
+    minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2859")
+
+    // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
+    implementation("net.minecraftforge:mergetool:0.2.3.3")
+    implementation("curse.maven:ic2_classic-242942:4476676")
+
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xjvm-default=all")
+        freeCompilerArgs.add("-Xcontext-receivers")
+    }
+}
 
 configure<UserDevExtension> {
 
@@ -49,31 +66,22 @@ configure<UserDevExtension> {
     }
 }
 
-dependencies {
-
-    minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2859")
-
-    // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
-    implementation("net.minecraftforge:mergetool:0.2.3.3")
-    implementation("curse.maven:ic2_classic-242942:4476676")
-
-}
-
-// Example for how to get properties into the manifest for reading by the runtime..
 tasks.withType<Jar> {
 
     archiveBaseName.set("ic2c-mffs_1.12.2-$version")
 
     manifest {
-        attributes["Specification-Title"] = "mffs"
-        attributes["Specification-Vendor"] = "orca"
-        attributes["Specification-Version"] = "1"
-        attributes["Implementation-Title"] = project.name
-        attributes["Implementation-Version"] = version
-        attributes["Implementation-Vendor"] = "orca"
-        attributes["Implementation-Timestamp"] = LocalDateTime.now()
-            .atOffset(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ"))
+        attributes(
+            "Specification-Title" to "mffs",
+            "Specification-Vendor" to "orca",
+            "Specification-Version" to "1",
+            "Implementation-Title" to project.name,
+            "Implementation-Version" to version,
+            "Implementation-Vendor" to "orca",
+            "Implementation-Timestamp" to LocalDateTime.now()
+                .atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ"))
+        )
     }
 
 }

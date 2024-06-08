@@ -1,8 +1,9 @@
 package mods.orca.mffs.container
 
-import mods.orca.mffs.MFFSMod
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.inventory.Container
+import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
 
 /**
@@ -10,12 +11,44 @@ import net.minecraft.item.ItemStack
  *
  * @property ourFirstSlotIndex The index of the first slot for this GUI.
  */
-abstract class ContainerBase(
-    @JvmField
-    protected val ourFirstSlotIndex: Int = 0
-) : Container() {
+abstract class ContainerBase(private val ourFirstSlotIndex: Int = 0) : Container() {
 
-    override fun canInteractWith(player: EntityPlayer) = true
+    /**
+     * Container with the standard arrangement of player slots.
+     *
+     * @param inventoryPlayer The inventory instance of the player using the container.
+     * @param inventoryOffsetY The vertical offset in the container before the inventory.
+     */
+    constructor(
+        inventoryPlayer: InventoryPlayer,
+        inventoryOffsetY: Int
+    ) : this(inventoryPlayer.mainInventory.size) {
+
+        for (y in 0..2) {
+            for (x in 0..8) {
+                addSlotToContainer(
+                    Slot(
+                        inventoryPlayer,
+                        x + y * 9 + 9,
+                        8 + x * 18,
+                        inventoryOffsetY + y * 18
+                    )
+                )
+            }
+        }
+
+        for (x in 0..8) {
+            addSlotToContainer(
+                Slot(
+                    inventoryPlayer,
+                    x,
+                    8 + x * 18,
+                    inventoryOffsetY + (3 * 18) + 4
+                )
+            )
+        }
+
+    }
 
     /**
      * Handler for a shift-click on a slot.
@@ -50,4 +83,5 @@ abstract class ContainerBase(
         return ItemStack.EMPTY
 
     }
+
 }

@@ -1,29 +1,32 @@
 package mods.orca.mffs.blocks.base
 
-import mods.orca.mffs.blocks.base.tile.TileUpgradableMachine
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import kotlin.reflect.KClass
 
-abstract class BlockUpgradableMachine<TE : TileUpgradableMachine>(
-    tileEntityClass: Class<TE>,
-    name: String
-) : BlockMachine<TE>(tileEntityClass, name) {
+abstract class BlockUpgradableMachine<TE : TileEntity>(
+    tileEntityClass: KClass<TE>
+) : BlockMachine<TE>(tileEntityClass) {
 
-    override fun onBlockAdded(worldIn: World, pos: BlockPos, state: IBlockState) {
-        getTileEntity(worldIn, pos)!!.findUpgrades()
+    override fun onBlockAdded(world: World, pos: BlockPos, state: IBlockState) {
+//        getTileEntity(world, pos)
+//            ?.run { scanForUpgrades() }
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun neighborChanged(
         state: IBlockState,
-        worldIn: World,
+        world: World,
         thisPos: BlockPos,
         fromBlock: Block,
         fromPos: BlockPos
     ) {
-        if (!worldIn.isRemote) {
-            getTileEntity(worldIn, thisPos)!!.findUpgrades()
+        if (!world.isRemote) {
+//            getTileEntity(world, thisPos)
+//                ?.run { scanForUpgrades() }
         }
     }
 

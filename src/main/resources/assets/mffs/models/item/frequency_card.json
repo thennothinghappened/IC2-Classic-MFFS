@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mffs:items/freqcard/blank"
+    "layer0": "mffs:items/frequency_card/linked"
   }
 }
