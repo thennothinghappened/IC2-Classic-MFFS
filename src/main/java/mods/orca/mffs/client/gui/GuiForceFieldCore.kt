@@ -1,7 +1,7 @@
 package mods.orca.mffs.client.gui
 
-import cpw.mods.fml.relauncher.Side
-import cpw.mods.fml.relauncher.SideOnly
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.client.gui.base.GuiWithPlayerInventory
 import mods.orca.mffs.client.gui.utils.GuiColour

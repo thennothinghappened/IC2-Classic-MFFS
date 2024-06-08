@@ -1,7 +1,7 @@
 package mods.orca.mffs.container
 
-import cpw.mods.fml.relauncher.Side
-import cpw.mods.fml.relauncher.SideOnly
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import mods.orca.mffs.blocks.core.TileForceFieldCore
 import mods.orca.mffs.client.gui.GuiForceFieldCore
 import net.minecraft.client.gui.inventory.GuiContainer

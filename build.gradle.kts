@@ -25,11 +25,11 @@ repositories {
 
 dependencies {
 
-    minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2859")
+    minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2860")
 
     // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
     implementation("net.minecraftforge:mergetool:0.2.3.3")
-    implementation("curse.maven:ic2_classic-242942:4476676")
+    implementation("curse.maven:ic2_classic-242942:5167044")
 
 }
 
