@@ -68,7 +68,7 @@ configure<UserDevExtension> {
 
 tasks.withType<Jar> {
 
-    archiveBaseName.set("ic2c-mffs_1.12.2-$version")
+    archiveBaseName.set("ic2c-mffs_1.12.2")
 
     manifest {
         attributes(
