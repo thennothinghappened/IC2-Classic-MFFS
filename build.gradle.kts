@@ -3,7 +3,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-version = "1.0.0"
+version = "0.1.0"
 group = "orca.mods.mffs"
 
 plugins {

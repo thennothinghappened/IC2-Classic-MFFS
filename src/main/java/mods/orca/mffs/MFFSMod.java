@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 @Mod(
     modid = MFFSMod.modId,
     name = "Modular Force Field System",
+    version = "0.1.0",
     dependencies = "required-after:ic2",
     useMetadata = true
 )
