@@ -35,14 +35,14 @@ class GuiForceFieldCore(
      */
     private fun drawPowerMeter() {
 
-        val filledWidth = container.energyPercent.toInt() * POWER_METER_WIDTH
+        val filledWidth = container.energyPercent * POWER_METER_WIDTH
 
         drawTexturedModalRect(
             drawPosX(POWER_METER_X),
             drawPosY(POWER_METER_Y),
             176,
             0,
-            filledWidth,
+            filledWidth.toInt(),
             13
         )
 
