@@ -19,6 +19,7 @@ object ItemFrequencyCard : Item() {
     init {
         setRegistryName(NAME)
         setTranslationKey(MFFSMod.translationKey(NAME))
+        setMaxStackSize(1)
     }
 
     @SideOnly(Side.CLIENT)

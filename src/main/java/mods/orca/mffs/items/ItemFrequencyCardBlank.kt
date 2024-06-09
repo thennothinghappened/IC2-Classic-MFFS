@@ -15,6 +15,7 @@ object ItemFrequencyCardBlank : Item() {
         setRegistryName(NAME)
         setTranslationKey(MFFSMod.translationKey(NAME))
         setCreativeTab(MFFSTab)
+        setMaxStackSize(1)
     }
 
 }
