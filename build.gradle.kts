@@ -11,6 +11,12 @@ plugins {
     kotlin("jvm")
 }
 
+val shadow: Configuration by configurations.creating {
+    exclude("org.jetbrains", "annotations")
+}
+
+jarJar.enable()
+
 repositories {
     mavenCentral()
     exclusiveContent {
@@ -24,6 +30,9 @@ repositories {
 }
 
 dependencies {
+
+    shadow("org.jetbrains.kotlin:kotlin-stdlib:${kotlin.coreLibrariesVersion}")
+    shadow("org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin.coreLibrariesVersion}")
 
     minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2860")
 
@@ -66,22 +75,30 @@ configure<UserDevExtension> {
     }
 }
 
-tasks.withType<Jar> {
+tasks {
 
-    archiveBaseName.set("ic2c-mffs_1.12.2")
+    jarJar.configure {
+        from(provider { shadow.map(::zipTree).toTypedArray() })
+    }
 
-    manifest {
-        attributes(
-            "Specification-Title" to "mffs",
-            "Specification-Vendor" to "orca",
-            "Specification-Version" to "1",
-            "Implementation-Title" to project.name,
-            "Implementation-Version" to version,
-            "Implementation-Vendor" to "orca",
-            "Implementation-Timestamp" to LocalDateTime.now()
-                .atOffset(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ"))
-        )
+    withType<Jar> {
+
+        archiveBaseName.set("ic2c-mffs_1.12.2")
+
+        manifest {
+            attributes(
+                "Specification-Title" to "mffs",
+                "Specification-Vendor" to "orca",
+                "Specification-Version" to "1",
+                "Implementation-Title" to project.name,
+                "Implementation-Version" to version,
+                "Implementation-Vendor" to "orca",
+                "Implementation-Timestamp" to LocalDateTime.now()
+                    .atOffset(ZoneOffset.UTC)
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ"))
+            )
+        }
+
     }
 
 }
