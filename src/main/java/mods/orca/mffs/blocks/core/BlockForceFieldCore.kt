@@ -7,7 +7,6 @@ import mods.orca.mffs.blocks.base.BlockUpgradableMachine
 import mods.orca.mffs.client.MFFSTab
 import mods.orca.mffs.container.MFFSGuiHandler
 import mods.orca.mffs.items.ItemFrequencyCardBlank
-import mods.orca.mffs.utils.openGui
 import net.minecraft.block.BlockLever
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
