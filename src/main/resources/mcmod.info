@@ -5,12 +5,11 @@
     "description": "Adds FORCEFIELDS!",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "",
+    "url": "https://github.com/thennothinghappened/IC2-Classic-MFFS",
     "updateUrl": "",
     "authorList": ["Thunderdark", "immibis", "kaj_", "IvySaur1996", "F4113nb34st", "orca"],
     "credits": "Originally by Thunderdark, updated by immibis. Some textures by kaj_ and IvySaur1996. Rewritten for 1.12.2 IC2 Classic by orca.",
-    "logoFile": "",
-    "screenshots": [],
-    "dependencies": []
+    "logoFile": "assets/mffs/textures/items/frequency_card/linked.png",
+    "screenshots": []
   }
 ]
