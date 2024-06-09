@@ -2,10 +2,13 @@ package mods.orca.mffs.blocks.core
 
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.blocks.IHasItemBlock
+import mods.orca.mffs.blocks.base.BlockMachine
 import mods.orca.mffs.blocks.base.BlockUpgradableMachine
 import mods.orca.mffs.client.MFFSTab
 import mods.orca.mffs.container.MFFSGuiHandler
 import mods.orca.mffs.items.ItemFrequencyCardBlank
+import mods.orca.mffs.utils.openGui
+import net.minecraft.block.BlockLever
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemBlock
@@ -72,22 +75,24 @@ object BlockForceFieldCore : BlockUpgradableMachine<TileForceFieldCore>(TileForc
 
             }
 
-//            is ItemBlock -> {
-//
-//                // If the player is trying to place an upgrade, don't get in the way!
-//                // TODO: Search for upgrade
-//                //                if (heldBlock is IBlockUpgrade) {
-//                //                    return false
-//                //                }
-//
-//            }
+            is ItemBlock -> when (item.block) {
 
-            else -> {
-                player.openGui(MFFSMod.instance, MFFSGuiHandler.GuiId.Core.ordinal, world, pos.x, pos.y, pos.z)
-                return true
+                // Allow placing levers.
+                is BlockLever -> {
+                    return false
+                }
+
+                // Allow placing other machines adjacent.
+                is BlockMachine<*> -> {
+                    return false
+                }
+
             }
 
         }
+
+        MFFSGuiHandler.openGui(player, MFFSGuiHandler.Gui.Core, world, pos)
+        return true
 
     }
 
