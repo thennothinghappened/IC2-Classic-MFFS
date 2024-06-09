@@ -99,13 +99,11 @@ configure<UserDevExtension> {
 
 tasks {
 
-    jarJar.configure {
-        from(provider { shadow.map(::zipTree).toTypedArray() })
-    }
+    val outputFileName = "ic2c-mffs_1.12.2"
 
     withType<Jar> {
 
-        archiveBaseName.set("ic2c-mffs_1.12.2")
+        archiveBaseName.set(outputFileName)
 
         manifest {
             attributes(
@@ -123,7 +121,18 @@ tasks {
 
     }
 
-    register<ProGuardTask>("proguardJar") {
+    /**
+     * Include shadow dependencies in fat jar.
+     */
+    jarJar.configure {
+        from(provider { shadow.map(::zipTree).toTypedArray() })
+    }
+
+    /**
+     * Task that runs ProGuard to minify (not obfuscate!) the fat jar. We use this since we're including the
+     * Kotlin stdlib, which otherwise increases size significantly.
+     */
+    val proguardReleaseJarJar = register<ProGuardTask>("proguardReleaseJarJar") {
 
         dependsOn("jarJar")
 
@@ -141,6 +150,21 @@ tasks {
         // Inform Proguard of the libraries we have!
         libraryjars("${System.getProperty("java.home")}/lib/rt.jar")
         libraryjars(configurations.runtimeClasspath)
+
+    }
+
+    /**
+     * Task that produces the release fat Jar output, reobfuscated and minified.
+     */
+    register<JarJar>("releaseJarJar") {
+
+        group = "build"
+        archiveBaseName.set("$outputFileName-release")
+
+        dependsOn(proguardReleaseJarJar)
+
+        from(proguardReleaseJarJar.map { zipTree(it.outputs.files.asPath) })
+        configuration(project.configurations.jarJar.get())
 
     }
 
