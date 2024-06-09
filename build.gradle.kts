@@ -1,20 +1,33 @@
 import net.minecraftforge.gradle.userdev.UserDevExtension
+import net.minecraftforge.gradle.userdev.tasks.JarJar
+import proguard.gradle.ProGuardTask
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 version = "0.1.0"
-group = "orca.mods.mffs"
+group = "mods.orca.mffs"
+
+buildscript {
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.5.+")
+    }
+}
 
 plugins {
     id("net.minecraftforge.gradle")
     kotlin("jvm")
 }
 
+/**
+ * Configuration for libraries to be included into the fat jar.
+ * We use this for the Kotlin Standard Library as it is not available in Minecraft's classpath.
+ */
 val shadow: Configuration by configurations.creating {
     exclude("org.jetbrains", "annotations")
 }
 
+// Enable creating a fat jar.
 jarJar.enable()
 
 repositories {
@@ -43,10 +56,14 @@ dependencies {
 }
 
 kotlin {
+
     compilerOptions {
         freeCompilerArgs.add("-Xjvm-default=all")
         freeCompilerArgs.add("-Xcontext-receivers")
     }
+
+    jvmToolchain(8)
+
 }
 
 configure<UserDevExtension> {
@@ -54,7 +71,9 @@ configure<UserDevExtension> {
     mappings("stable",  "39-1.12")
 
     runs {
+
         create("client") {
+
             workingDirectory(project.file("run"))
 
             // Recommended logging data for a userdev environment
@@ -62,6 +81,7 @@ configure<UserDevExtension> {
 
             // Recommended logging level for the console
             property("forge.logging.console.level", "debug")
+
         }
 
         create("server") {
@@ -71,7 +91,9 @@ configure<UserDevExtension> {
 
             // Recommended logging level for the console
             property("forge.logging.console.level", "debug")
+
         }
+
     }
 }
 
@@ -98,6 +120,27 @@ tasks {
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ"))
             )
         }
+
+    }
+
+    register<ProGuardTask>("proguardJar") {
+
+        dependsOn("jarJar")
+
+        configuration("src/proguard-rules.pro")
+
+        named<JarJar>("jarJar").let { jarTask ->
+
+            injars(jarTask.flatMap { it.archiveFile })
+            outjars(jarTask.flatMap {
+                layout.buildDirectory.file("libs/${it.archiveFile.get().asFile.nameWithoutExtension}-minified.jar")
+            })
+
+        }
+
+        // Inform Proguard of the libraries we have!
+        libraryjars("${System.getProperty("java.home")}/lib/rt.jar")
+        libraryjars(configurations.runtimeClasspath)
 
     }
 
