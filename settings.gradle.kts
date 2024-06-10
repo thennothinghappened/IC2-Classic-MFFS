@@ -5,10 +5,7 @@ pluginManagement {
 
     repositories {
         gradlePluginPortal()
-        mavenCentral()
-        maven(url = "https://maven.minecraftforge.net/")
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
-        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://maven.minecraftforge.net/")
     }
 
     // Getting Proguard to work: https://github.com/Guardsquare/proguard/issues/225#issuecomment-1195015431
