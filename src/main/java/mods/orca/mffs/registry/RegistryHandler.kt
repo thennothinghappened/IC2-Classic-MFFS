@@ -1,15 +1,15 @@
 package mods.orca.mffs.registry
 
 import mods.orca.mffs.MFFSMod
-import mods.orca.mffs.blocks.BlockForceField
+import mods.orca.mffs.blocks.field.ForceFieldBlock
 import mods.orca.mffs.blocks.IHasItemBlock
 import mods.orca.mffs.blocks.base.BlockTileEntity
 import mods.orca.mffs.blocks.core.BlockForceFieldCore
+import mods.orca.mffs.blocks.field.ProjectorBlock
 import mods.orca.mffs.items.ItemFrequencyCard
 import mods.orca.mffs.items.ItemFrequencyCardBlank
 import net.minecraft.block.Block
 import net.minecraft.item.Item
-import net.minecraft.item.ItemBlock
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -25,8 +25,9 @@ object RegistryHandler {
      * Set of blocks we know of to register.
      */
     private val blocks: Set<Block> = setOf(
-        BlockForceField,
-        BlockForceFieldCore
+        ForceFieldBlock,
+        BlockForceFieldCore,
+        ProjectorBlock
     )
 
     /**

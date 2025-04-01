@@ -1,6 +1,7 @@
 package mods.orca.mffs.utils
 
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.math.BlockPos
 
 /**
  * Ordered list of NBT tag types whose ordinal values correspond to their tag ID for type checking.
@@ -46,3 +47,7 @@ fun NBTTagCompound.getBooleanOrNull(key: String) =
         getBoolean(key)
     else null
 
+fun List<Int>.toBlockPos() = BlockPos(get(0), get(1), get(2))
+fun IntArray.toBlockPos() = BlockPos(get(0), get(1), get(2))
+fun BlockPos.toIntArray() = intArrayOf(x, y, z)
+fun BlockPos.toList() = listOf(x, y, z)
