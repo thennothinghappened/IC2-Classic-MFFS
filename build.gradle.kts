@@ -48,9 +48,6 @@ dependencies {
     shadow("org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin.coreLibrariesVersion}")
 
     minecraft("net.minecraftforge:forge:1.12.2-14.23.5.2860")
-
-    // https://stackoverflow.com/questions/68377027/minecraft-forge-mod-loader-fml-loading-and-crashing-mc
-    implementation("net.minecraftforge:mergetool:0.2.3.3")
     implementation("curse.maven:ic2_classic-242942:5167044")
 
 }
@@ -66,7 +63,7 @@ kotlin {
 
 }
 
-configure<UserDevExtension> {
+minecraft {
 
     mappings("stable",  "39-1.12")
 
@@ -86,6 +83,8 @@ configure<UserDevExtension> {
 
         create("server") {
 
+            workingDirectory(project.file("run/server"))
+
             // Recommended logging data for a userdev environment
             property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
 
@@ -98,6 +97,12 @@ configure<UserDevExtension> {
 }
 
 tasks {
+
+    processResources {
+        filesMatching("mcmod.info") {
+            expand(mapOf("version" to project.version, "mcversion" to "1.12.2"))
+        }
+    }
 
     val outputFileName = "ic2c-mffs_1.12.2"
 
