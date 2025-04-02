@@ -1,5 +1,10 @@
 package mods.orca.mffs.blocks.field
 
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encoding.AbstractEncoder
+import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.modules.SerializersModule
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.blocks.IHasItemBlock
 import mods.orca.mffs.blocks.base.BlockTileEntity
@@ -21,6 +26,7 @@ import net.minecraft.world.storage.WorldSavedData
 import kotlin.annotation.AnnotationRetention.SOURCE
 import kotlin.annotation.AnnotationTarget.*
 import kotlin.math.absoluteValue
+import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -71,21 +77,26 @@ object ProjectorBlock : BlockTileEntity<ProjectorTile>(ProjectorTile::class, Mat
 /**
  * A signed-distance function producing a given field shape.
  */
-enum class FieldPerimeterSdf {
+@Serializable
+sealed interface FieldPerimeterSdf {
 
     /**
-     * Hollow sphere shape.
+     * Calculate the signed distance to the edge of this field shape.
      */
-    Sphere;
+    fun calculate(x: Int, y: Int, z: Int): Double
 
-    companion object {
-        fun FieldPerimeterSdf.calculate(x: Int, y: Int, z: Int, radius: Int): Double = when (this) {
-            Sphere -> sqrt(
-                x.toDouble().pow(2) +
-                        y.toDouble().pow(2) +
-                        z.toDouble().pow(2)
-            ) - radius.toDouble()
-        }
+    @Serializable
+    data class Sphere(val radius: Int = 5) : FieldPerimeterSdf {
+        override fun calculate(x: Int, y: Int, z: Int): Double = sqrt(
+            x.toDouble().pow(2) +
+                    y.toDouble().pow(2) +
+                    z.toDouble().pow(2)
+        ) - radius.toDouble()
+    }
+
+    @Serializable
+    data class Square(val radius: Int = 5) : FieldPerimeterSdf {
+        override fun calculate(x: Int, y: Int, z: Int): Double = maxOf(x, y, z).toDouble() - radius.toDouble()
     }
 
 }
@@ -94,7 +105,7 @@ class ProjectorTile(private var sdf: FieldPerimeterSdf) : TileEntity() {
 
     // Constructor to make forge happy when restoring the entity.
     @Suppress("unused")
-    constructor() : this(FieldPerimeterSdf.Sphere)
+    constructor() : this(FieldPerimeterSdf.Sphere())
 
     fun uwu() {
 
@@ -122,7 +133,7 @@ class ProjectorTile(private var sdf: FieldPerimeterSdf) : TileEntity() {
         super.readFromNBT(compound)
 
         val sdfTypeName = compound.getString(NbtKey.SdfType.name)
-        sdf = FieldPerimeterSdf.entries.firstOrNull { it.name == sdfTypeName } ?: FieldPerimeterSdf.Sphere
+        sdf = FieldPerimeterSdf.entries.firstOrNull { it.name == sdfTypeName } ?: FieldPerimeterSdf.Sphere()
     }
 
     override fun writeToNBT(compound: NBTTagCompound): NBTTagCompound {
