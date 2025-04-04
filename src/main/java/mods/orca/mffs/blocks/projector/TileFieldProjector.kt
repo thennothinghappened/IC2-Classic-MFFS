@@ -1,125 +1,17 @@
-package mods.orca.mffs.blocks.field
+package mods.orca.mffs.blocks.projector
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import mods.orca.mffs.FieldManager.Companion.fieldManager
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.ProjectorId
-import mods.orca.mffs.blocks.IHasItemBlock
-import mods.orca.mffs.blocks.base.BlockTileEntity
+import mods.orca.mffs.blocks.field.ForceFieldBlock
 import mods.orca.mffs.blocks.utils.serializedStateOrNull
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemBlock
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3i
-import net.minecraft.world.World
 import kotlin.math.absoluteValue
-import kotlin.math.pow
-import kotlin.math.sqrt
 
-
-object ProjectorBlock : BlockTileEntity<ProjectorTile>(ProjectorTile::class, Material.IRON), IHasItemBlock {
-
-    private const val NAME = "projector"
-
-    override val itemBlock = ItemBlock(this).apply {
-        setRegistryName(NAME)
-    }
-
-    init {
-        setRegistryName(NAME)
-        setTranslationKey(MFFSMod.translationKey(NAME))
-        setHardness(3f)
-        setResistance(50f)
-    }
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block, fromPos: BlockPos) {
-
-        val projector = getTileEntity(worldIn, pos)
-            ?: TODO("FIXME: don't know how to deal with not having a tile.")
-
-        val powered = worldIn.isBlockPowered(pos)
-
-        when {
-            powered && !projector.active -> projector.activateField()
-            !powered && projector.active -> projector.deactivateField()
-            else -> Unit
-        }
-
-    }
-
-    override fun onBlockClicked(worldIn: World, pos: BlockPos, playerIn: EntityPlayer) {
-        val projector = getTileEntity(worldIn, pos)
-            ?: TODO("FIXME: don't know how to deal with not having a tile.")
-
-        projector.testExpandingTheField()
-    }
-
-    override fun breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) {
-
-        val projector = getTileEntity(worldIn, pos)
-            ?: TODO("FIXME: don't know how to deal with not having a tile.")
-
-        projector.onDestroy()
-        super.breakBlock(worldIn, pos, state)
-
-    }
-
-    override fun createTileEntity(world: World, state: IBlockState): ProjectorTile {
-        return ProjectorTile(FieldPerimeterSdf.Sphere())
-    }
-
-}
-
-/**
- * A signed-distance function producing a given field shape.
- */
-@Serializable
-sealed interface FieldPerimeterSdf {
-
-    /**
-     * Calculate the signed distance to the edge of this field shape.
-     */
-    operator fun invoke(x: Int, y: Int, z: Int): Double
-
-    /**
-     * Half of the length, width and height of the field. Determines the area that encompasses the SDF.
-     */
-    val halfSize: Vec3i
-
-    @Serializable
-    data class Sphere(val radius: Int = 5) : FieldPerimeterSdf {
-
-        override fun invoke(x: Int, y: Int, z: Int): Double = sqrt(
-            x.toDouble().pow(2) +
-                    y.toDouble().pow(2) +
-                    z.toDouble().pow(2)
-        ) - radius.toDouble()
-
-        override val halfSize: Vec3i
-            get() = Vec3i(radius, radius, radius)
-
-    }
-
-    @Serializable
-    data class Cube(val radius: Int = 5) : FieldPerimeterSdf {
-
-        override fun invoke(x: Int, y: Int, z: Int): Double = maxOf(x, y, z).toDouble() - radius.toDouble()
-
-        override val halfSize: Vec3i
-            get() = Vec3i(radius, radius, radius)
-
-    }
-
-}
-
-class ProjectorTile(sdf: FieldPerimeterSdf) : TileEntity() {
+class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
 
     var id: ProjectorId? = null
 
@@ -171,13 +63,13 @@ class ProjectorTile(sdf: FieldPerimeterSdf) : TileEntity() {
     }
 
     fun activateField() {
-        require(!active) {"Field must NOT be already active when activating it"}
+        require(!active) { "Field must NOT be already active when activating it" }
         createField()
         active = true
     }
 
     fun deactivateField() {
-        require(active) {"Field must be active when deactivating it"}
+        require(active) { "Field must be active when deactivating it" }
         destroyField()
         active = false
     }

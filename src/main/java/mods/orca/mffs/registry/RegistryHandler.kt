@@ -5,7 +5,7 @@ import mods.orca.mffs.blocks.field.ForceFieldBlock
 import mods.orca.mffs.blocks.IHasItemBlock
 import mods.orca.mffs.blocks.base.BlockTileEntity
 import mods.orca.mffs.blocks.core.BlockForceFieldCore
-import mods.orca.mffs.blocks.field.ProjectorBlock
+import mods.orca.mffs.blocks.projector.BlockFieldProjector
 import mods.orca.mffs.items.ItemFrequencyCard
 import mods.orca.mffs.items.ItemFrequencyCardBlank
 import net.minecraft.block.Block
@@ -27,7 +27,7 @@ object RegistryHandler {
     private val blocks: Set<Block> = setOf(
         ForceFieldBlock,
         BlockForceFieldCore,
-        ProjectorBlock
+        BlockFieldProjector
     )
 
     /**

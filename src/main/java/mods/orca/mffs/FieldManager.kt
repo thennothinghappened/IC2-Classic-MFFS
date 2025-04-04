@@ -3,7 +3,7 @@ package mods.orca.mffs
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import mods.orca.mffs.blocks.core.TileForceFieldCore
-import mods.orca.mffs.blocks.field.ProjectorTile
+import mods.orca.mffs.blocks.projector.TileFieldProjector
 import mods.orca.mffs.utils.nbt.serializers.BlockPosSerializer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
@@ -47,7 +47,7 @@ class FieldManager(name: String) : WorldSavedData(name) {
         /**
          * Retrieve the relevant field manager for a projector.
          */
-        val ProjectorTile.fieldManager
+        val TileFieldProjector.fieldManager
             get() = get(world)
 
         /**
@@ -62,7 +62,7 @@ class FieldManager(name: String) : WorldSavedData(name) {
      * Register a new projector in the system. On state restoration, existing projectors will be assigned their original
      * ID.
      */
-    fun registerProjector(projector: ProjectorTile) {
+    fun registerProjector(projector: TileFieldProjector) {
 
         require(projector.id == null) {"Attempted to register projector which already knows its id"}
 
@@ -96,7 +96,7 @@ class FieldManager(name: String) : WorldSavedData(name) {
     /**
      * Remove a projector from the registry (i.e., it has been destroyed.)
      */
-    fun deregisterProjector(projector: ProjectorTile) {
+    fun deregisterProjector(projector: TileFieldProjector) {
 
         val id = projector.id ?: return
 
@@ -114,7 +114,7 @@ class FieldManager(name: String) : WorldSavedData(name) {
         val invalidProjectorIds = mutableSetOf<ProjectorId>()
 
         for ((id, pos) in state.projectorPositions) {
-            if (world.getTileEntity(pos) !is ProjectorTile) {
+            if (world.getTileEntity(pos) !is TileFieldProjector) {
                 MFFSMod.logger.debug("Marking invalid projector {} at {}", id, pos)
                 invalidProjectorIds.add(id)
             }
