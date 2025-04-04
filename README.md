@@ -1,10 +1,11 @@
 # Modular Force-Field System for IC2-Classic!
 
-This is the repository for my MFFS mod rewrite for **1.12.2**, based directly on the work by Thunderdark and immibis.
+This is my MFFS rewrite for **1.12.2**, based on the work by Thunderdark and immibis.
 
-As the source code was included for the version `rev7` as included in [Tekkit Classic](),
-I used this source as a reference for some values - mainly for drawing the GUI - as this rewrite seeks to be as faithful
-as possible to the original as we got in Classic; bringing it as-is to 1.12.2.
+Textures are taken from the original mod, whilst the code is a ground-up rewrite in Kotlin. For specific numbers, I've
+used the original mod as a reference, with the goal of being as faithful as possible to the mod as it was in
+[Tekkit Classic](https://www.technicpack.net/modpack/tekkit.552560). MFFS included its source code in the mod's JAR, 
+which made this a substantially easier process :)
 
 **Working force-field!:**
 ![force-field-test.png](docs/force-field-test.png)
