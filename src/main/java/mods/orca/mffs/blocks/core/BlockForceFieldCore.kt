@@ -1,7 +1,7 @@
 package mods.orca.mffs.blocks.core
 
 import mods.orca.mffs.MFFSMod
-import mods.orca.mffs.blocks.IHasItemBlock
+import mods.orca.mffs.blocks.BlockWithItem
 import mods.orca.mffs.blocks.base.BlockMachine
 import mods.orca.mffs.blocks.base.BlockUpgradableMachine
 import mods.orca.mffs.client.MFFSTab
@@ -19,7 +19,7 @@ import net.minecraft.world.World
 /**
  * Block component of the Force-Field Core - see [TileForceFieldCore]!
  */
-object BlockForceFieldCore : BlockUpgradableMachine<TileForceFieldCore>(TileForceFieldCore::class), IHasItemBlock {
+object BlockForceFieldCore : BlockUpgradableMachine<TileForceFieldCore>(TileForceFieldCore::class), BlockWithItem {
 
     private const val NAME = "core"
 

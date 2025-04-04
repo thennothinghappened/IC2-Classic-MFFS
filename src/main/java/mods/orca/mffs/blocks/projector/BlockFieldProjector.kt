@@ -1,7 +1,7 @@
 package mods.orca.mffs.blocks.projector
 
 import mods.orca.mffs.MFFSMod
-import mods.orca.mffs.blocks.IHasItemBlock
+import mods.orca.mffs.blocks.BlockWithItem
 import mods.orca.mffs.blocks.base.BlockTileEntity
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -13,7 +13,7 @@ import net.minecraft.world.World
 
 
 object BlockFieldProjector : BlockTileEntity<TileFieldProjector>(TileFieldProjector::class, Material.IRON),
-    IHasItemBlock {
+    BlockWithItem {
 
     private const val NAME = "projector"
 

@@ -2,7 +2,7 @@ package mods.orca.mffs.registry
 
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.blocks.field.ForceFieldBlock
-import mods.orca.mffs.blocks.IHasItemBlock
+import mods.orca.mffs.blocks.BlockWithItem
 import mods.orca.mffs.blocks.base.BlockTileEntity
 import mods.orca.mffs.blocks.core.BlockForceFieldCore
 import mods.orca.mffs.blocks.projector.BlockFieldProjector
@@ -49,7 +49,7 @@ object RegistryHandler {
 
         // Register accompanying [ItemBlock]s for blocks which use them.
         blocks
-            .mapNotNull { it as? IHasItemBlock }
+            .mapNotNull { it as? BlockWithItem }
             .forEach { event.registry.register(it.itemBlock) }
 
     }

@@ -5,7 +5,7 @@ import net.minecraft.item.ItemBlock
 /**
  * A block which should have an [ItemBlock] registered for it.
  */
-interface IHasItemBlock {
+interface BlockWithItem {
 
     /**
      * The [ItemBlock] this block owns.
