@@ -2,6 +2,7 @@ package mods.orca.mffs;
 
 import mods.orca.mffs.proxy.Proxy;
 import mods.orca.mffs.registry.RegistryHandler;
+import mods.orca.mffs.utils.nbt.NbtFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +28,11 @@ public class MFFSMod {
 
     public static final String modId = "mffs";
     public static Logger logger;
+
+    /**
+     * Global instance of the NBT serialization tools.
+     */
+    public static NbtFormat nbt = NbtFormat.Default;
 
     @Mod.Instance(modId)
     public static MFFSMod instance;

@@ -4,7 +4,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.encoding.CompositeEncoder
-import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import net.minecraft.nbt.NBTBase
 import net.minecraft.nbt.NBTTagByte
@@ -17,30 +16,83 @@ import net.minecraft.nbt.NBTTagLong
 import net.minecraft.nbt.NBTTagShort
 import net.minecraft.nbt.NBTTagString
 
+/**
+ * Encoder for writing data as structured NBT that can be saved or sent across the network.
+ */
 @ExperimentalSerializationApi
-fun encodeToNbtCompound()
+class NbtEncoder(private val format: NbtFormat) : AbstractEncoder() {
 
-@ExperimentalSerializationApi
-private class NbtEncoder private constructor(structure: Structure) : AbstractEncoder() {
+    override val serializersModule: SerializersModule
+        get() = format.serializersModule
 
-    override val serializersModule: SerializersModule = EmptySerializersModule()
-    private val structStack = mutableListOf(structure)
-
+    private val nbtStack = mutableListOf<NBTBase>()
     private val keyStack = mutableListOf<String>()
     private val indexStack = mutableListOf<Int>()
 
-    override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean {
-        when (structStack.last()) {
-            is Structure.Compound -> keyStack.add(descriptor.getElementName(index))
-            is Structure.List -> indexStack.add(index)
+    private val currentStructureOrNull
+        get() = nbtStack.lastOrNull()
+
+    val rootNbt
+        get() = nbtStack.first()
+
+    /**
+     * Encode the given [nbt]. If there is no current NBT, then this must be the top-level element.
+     */
+    private fun encode(nbt: NBTBase) {
+
+        when (val current = currentStructureOrNull) {
+
+            // We're adding a key/value pair to the current map.
+            is NBTTagCompound -> current.setTag(keyStack.removeLast(), nbt)
+
+            // We're adding an element to a list.
+            is NBTTagList -> current.set(indexStack.removeLast(), nbt)
+
+            // No action required - this becomes the root node.
+            null -> {}
+
+            // We've been asked to encode data into a non-structural node - i.e., one with a singular member.
+            //
+            // This doesn't make much sense, since to get here the caller must have attempted to encode more than one
+            // element into a single-element node.
+            //
+            // This is not an outright error, as we might use this path in the future for the specialised array types,
+            // for instance. I'm not yet sure how that might look.
+            else -> TODO("Cannot currently encode non-structural data at the top-level")
+
         }
 
+        if (nbt is NBTTagCompound || nbt is NBTTagList) {
+            // We're opening a new structure.
+            nbtStack.add(nbt)
+        }
+
+    }
+
+    override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean {
+        // This method gives us a chance to look at the descriptor so we can snatch the key name or list index.
+        when (currentStructureOrNull) {
+            is NBTTagCompound -> keyStack.add(descriptor.getElementName(index))
+            is NBTTagList -> indexStack.add(index)
+            else -> Unit
+        }
         return true
     }
 
-    private fun encode(value: NBTBase) = when (val current = structStack.last()) {
-        is Structure.Compound -> current.nbt.setTag(keyStack.removeLast(), value)
-        is Structure.List -> current.nbt.set(indexStack.removeLast(), value)
+    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
+
+        when (descriptor.kind) {
+            is StructureKind.LIST -> encode(NBTTagList())
+            else -> encode(NBTTagCompound())
+        }
+
+        return this
+    }
+
+    override fun endStructure(descriptor: SerialDescriptor) {
+        if (nbtStack.size > 1) {
+            nbtStack.removeLast()
+        }
     }
 
     override fun encodeString(value: String) = encode(NBTTagString(value))
@@ -53,33 +105,5 @@ private class NbtEncoder private constructor(structure: Structure) : AbstractEnc
     override fun encodeDouble(value: Double): Unit = encode(NBTTagDouble(value))
     override fun encodeChar(value: Char): Unit = encode(NBTTagString(value.toString()))
     override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int): Unit = encode(NBTTagString(enumDescriptor.getElementName(index)))
-
-    override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
-        val next = when (descriptor.kind) {
-            StructureKind.MAP -> Structure.Compound()
-            StructureKind.LIST -> Structure.List()
-            else -> TODO("Structure type for $descriptor not yet implemented!")
-        }
-
-        structStack.add(next)
-        return this
-    }
-
-    override fun endStructure(descriptor: SerialDescriptor) {
-        val child = structStack.removeLast()
-        when (val current = structStack.last()) {
-            is Structure.Compound -> current.nbt.setTag(descriptor.serialName, child.nbt)
-            is Structure.List -> current.nbt.appendTag(child.nbt)
-        }
-    }
-
-    sealed interface Structure {
-
-        val nbt: NBTBase
-
-        data class Compound(override val nbt: NBTTagCompound = NBTTagCompound()) : Structure
-        data class List(override val nbt: NBTTagList = NBTTagList()) : Structure
-
-    }
 
 }
