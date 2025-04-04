@@ -6,15 +6,13 @@ As the source code was included for the version `rev7` as included in [Tekkit Cl
 I used this source as a reference for some values - mainly for drawing the GUI - as this rewrite seeks to be as faithful
 as possible to the original as we got in Classic; bringing it as-is to 1.12.2.
 
-## Status
-
 **Working force-field!:**
 ![force-field-test.png](docs/force-field-test.png)
 
 **Force-Field Core's GUI, plus linking cards:**
 ![core-gui.png](docs/core-gui.png)
 
-### Issues/Notes
+## Issues/Notes
 
 Below is a non-exhaustive list of current issues and missing functionality: 
 
