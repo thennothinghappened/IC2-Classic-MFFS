@@ -2,6 +2,7 @@ package mods.orca.mffs
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import mods.orca.mffs.blocks.core.TileForceFieldCore
 import mods.orca.mffs.blocks.field.ProjectorTile
 import mods.orca.mffs.utils.nbt.serializers.BlockPosSerializer
 import net.minecraft.nbt.NBTTagCompound
@@ -41,10 +42,18 @@ class FieldManager(name: String) : WorldSavedData(name) {
 
         }
 
+        // NOTE: this is a *bit* gross, but I didn't want to pollute all of `TileEntity` or make some shared inheritance
+        // stuff. Will address later.
         /**
          * Retrieve the relevant field manager for a projector.
          */
         val ProjectorTile.fieldManager
+            get() = get(world)
+
+        /**
+         * Retrieve the relevant field manager for a force-field core.
+         */
+        val TileForceFieldCore.fieldManager
             get() = get(world)
 
     }
