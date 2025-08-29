@@ -5,10 +5,13 @@ import mods.orca.mffs.WorldFieldManager
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.tileentity.TileEntity
+import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.BlockRenderLayer
+import net.minecraft.util.DamageSource
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
@@ -45,6 +48,22 @@ object ForceFieldBlock : Block(Material.BARRIER) {
             world.setBlockState(pos, state)
         } else {
             super.breakBlock(world, pos, state)
+        }
+    }
+
+    override fun getCollisionBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB? {
+        // FIXME: zapper shouldn't always be on!
+        if (true) {
+            return AxisAlignedBB(0.01, 0.01, 0.01, 0.99, 0.99, 0.99)
+        } else {
+            return super.getCollisionBoundingBox(state, source, pos)
+        }
+    }
+
+    override fun onEntityCollision(world: World, pos: BlockPos, state: IBlockState, entity: Entity) {
+        // FIXME: zapper shouldn't always be on!
+        if (entity is EntityLivingBase) {
+            entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1f)
         }
     }
 }
