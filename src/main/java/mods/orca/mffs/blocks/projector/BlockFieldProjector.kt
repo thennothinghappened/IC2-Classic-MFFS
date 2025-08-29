@@ -29,16 +29,17 @@ object BlockFieldProjector : BlockTileEntity<TileFieldProjector>(TileFieldProjec
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
-    override fun neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block, fromPos: BlockPos) {
+    override fun neighborChanged(state: IBlockState, world: World, pos: BlockPos, block: Block, fromPos: BlockPos) {
 
-        val projector = getTileEntity(worldIn, pos)
+        val projector = getTileEntity(world, pos)
             ?: TODO("FIXME: don't know how to deal with not having a tile.")
 
-        val powered = worldIn.isBlockPowered(pos)
+        val powered = world.isBlockPowered(pos)
+        val active = projector.isActive()
 
         when {
-            powered && !projector.active -> projector.activateField()
-            !powered && projector.active -> projector.deactivateField()
+            powered && !active -> projector.activateField()
+            !powered && active -> projector.deactivateField()
             else -> Unit
         }
 
