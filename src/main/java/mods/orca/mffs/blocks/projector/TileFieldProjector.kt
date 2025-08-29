@@ -2,9 +2,8 @@ package mods.orca.mffs.blocks.projector
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import mods.orca.mffs.FieldManager.Companion.fieldManager
 import mods.orca.mffs.MFFSMod
-import mods.orca.mffs.ProjectorId
+import mods.orca.mffs.WorldFieldManager
 import mods.orca.mffs.blocks.field.ForceFieldBlock
 import mods.orca.mffs.blocks.utils.serializedStateOrNull
 import net.minecraft.nbt.NBTTagCompound
@@ -12,9 +11,6 @@ import net.minecraft.tileentity.TileEntity
 import kotlin.math.absoluteValue
 
 class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
-
-    var id: ProjectorId? = null
-
     var state = State(sdf)
         private set
 
@@ -44,7 +40,7 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
             return
         }
 
-        fieldManager.registerProjector(this)
+        WorldFieldManager.getOrCreate(world).registerProjector(this)
 
     }
 
@@ -58,7 +54,7 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
             deactivateField()
         }
 
-        fieldManager.deregisterProjector(this)
+        WorldFieldManager.getOrCreate(world).deregisterProjector(this)
 
     }
 
@@ -126,6 +122,8 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
 
         // FIXME: We should be using the field manager's tracking!
         val halfSize = sdf.halfSize
+
+        WorldFieldManager.getOrCreate(world)
 
         for (y in -halfSize.y..halfSize.y) {
             for (z in -halfSize.z..halfSize.z) {
