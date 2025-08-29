@@ -95,7 +95,16 @@ class NbtEncoder(private val format: NbtFormat) : AbstractEncoder() {
         }
     }
 
-    override fun encodeString(value: String) = encode(NBTTagString(value))
+    override fun encodeNull() {
+        encode(NBTTagNull)
+    }
+
+    override fun encodeString(value: String) {
+        // Reserve `@something...` for sentinels (namely `@null`)
+        val string = if (value.startsWith('@')) "@$value" else value
+        encode(NBTTagString(string))
+    }
+
     override fun encodeByte(value: Byte) = encode(NBTTagByte(value))
     override fun encodeBoolean(value: Boolean) = encode(NBTTagByte(if (value) 1 else 0))
     override fun encodeInt(value: Int) = encode(NBTTagInt(value))

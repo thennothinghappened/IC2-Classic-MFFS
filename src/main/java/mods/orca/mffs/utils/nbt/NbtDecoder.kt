@@ -82,7 +82,27 @@ class NbtDecoder(nbt: NBTBase, private val format: NbtFormat) : AbstractDecoder(
         nbtStack.removeLast()
     }
 
-    override fun decodeString(): String = currentEntry.decode<NBTTagString>().string
+    override fun decodeNotNullMark(): Boolean {
+        val entry = currentEntry.decode<NBTBase>()
+
+        if (entry is NBTTagString) {
+            return entry.string == NBTTagNull.string
+        } else {
+            return false
+        }
+    }
+
+    override fun decodeString(): String {
+        val string = currentEntry.decode<NBTTagString>().string
+
+        if (!string.startsWith('@')) {
+            return string
+        }
+
+        // Remove our leading `@` (used to avoid collisions with sentinels)
+        return string.substring(1)
+    }
+
     override fun decodeByte(): Byte = currentEntry.decode<NBTPrimitive>().byte
     override fun decodeBoolean(): Boolean = currentEntry.decode<NBTPrimitive>().byte.toInt() != 0
     override fun decodeInt(): Int = currentEntry.decode<NBTPrimitive>().int
