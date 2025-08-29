@@ -86,9 +86,9 @@ class NbtDecoder(nbt: NBTBase, private val format: NbtFormat) : AbstractDecoder(
         val entry = currentEntry.decode<NBTBase>()
 
         if (entry is NBTTagString) {
-            return entry.string == NBTTagNull.string
+            return entry.string != NBTTagNull.string
         } else {
-            return false
+            return true
         }
     }
 
