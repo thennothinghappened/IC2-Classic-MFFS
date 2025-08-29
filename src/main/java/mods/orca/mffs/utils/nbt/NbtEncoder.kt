@@ -46,7 +46,15 @@ class NbtEncoder(private val format: NbtFormat) : AbstractEncoder() {
             is NBTTagCompound -> current.setTag(keyStack.removeLast(), nbt)
 
             // We're adding an element to a list.
-            is NBTTagList -> current.set(indexStack.removeLast(), nbt)
+            is NBTTagList -> {
+                val index = indexStack.removeLast()
+
+                if (index >= current.tagCount()) {
+                    current.appendTag(nbt)
+                } else {
+                    current.set(indexStack.removeLast(), nbt)
+                }
+            }
 
             // No action required - this becomes the root node.
             null -> {}
