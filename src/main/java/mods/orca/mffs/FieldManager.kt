@@ -80,47 +80,43 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
     fun enableField(projector: TileFieldProjector) {
         val id = projectorId(projector)
         val props = projectorProps(projector)
+
         val field = projector.getFieldShape()
+        props.field = field
 
         field.forEach { pos ->
-            if (projectorPropsById
-                .filter { it.key != id }
-                .values
-                .any { it.field?.contains(pos) == true }
-            ) {
-                return@forEach
+            if (getOwnerId(pos) == id) {
+                projector.world.setBlockState(pos, ForceFieldBlock.defaultState)
             }
-
-            projector.world.setBlockState(pos, ForceFieldBlock.defaultState)
         }
 
-        props.field = field
         markDirty()
     }
 
     fun disableField(projector: TileFieldProjector) {
         val id = projectorId(projector)
         val props = projectorProps(projector)
+
         val field = props.field ?: error("Cannot disable field that is already disabled (projector $id)")
+        props.field = null
 
         field.forEach { pos ->
-            if (projectorPropsById
-                    .filter { it.key != id }
-                    .values
-                    .any { it.field?.contains(pos) == true }
-            ) {
-                return@forEach
+            if (getOwnerId(pos) == null) {
+                projector.world.setBlockToAir(pos)
             }
-
-            projector.world.setBlockToAir(pos)
         }
 
-        props.field = null
         markDirty()
     }
 
     fun isFieldEnabled(projector: TileFieldProjector): Boolean {
         return projectorProps(projector).field != null
+    }
+
+    fun getOwnerId(fieldBlockPos: BlockPos): Int? {
+        return projectorPropsById.firstNotNullOfOrNull { (id, props) ->
+            if (props.field?.contains(fieldBlockPos) == true) id else null
+        }
     }
 
     private fun projectorIdOrNull(projector: TileFieldProjector): Int? {

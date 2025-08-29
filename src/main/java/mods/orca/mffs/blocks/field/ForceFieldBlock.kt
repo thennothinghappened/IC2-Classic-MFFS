@@ -1,21 +1,21 @@
 package mods.orca.mffs.blocks.field
 
 import mods.orca.mffs.MFFSMod
+import mods.orca.mffs.WorldFieldManager
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.BlockRenderLayer
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
 @Suppress("OVERRIDE_DEPRECATION")
 object ForceFieldBlock : Block(Material.BARRIER) {
-
     private const val NAME = "forcefield"
-//    private val FORCEFIELD_TYPE: PropertyEnum<ForceFieldTyps> = PropertyEnum.create("type", ForceFieldTyps::class.java)
 
     init {
         setRegistryName(NAME)
@@ -36,16 +36,15 @@ object ForceFieldBlock : Block(Material.BARRIER) {
         return false
     }
 
-//    override fun hasTileEntity(state: IBlockState): Boolean = true
-//    override fun createTileEntity(world: World, state: IBlockState): ForceFieldTile? {
-//
-//        return null
-//    }
+    override fun breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+        val fieldManager = WorldFieldManager.getOrNull(world) ?: return
+        val owner = fieldManager.getOwnerId(pos)
 
-}
-
-class ForceFieldTile : TileEntity() {
-
-
-
+        if (owner != null) {
+            // Re-generate the field!
+            world.setBlockState(pos, state)
+        } else {
+            super.breakBlock(world, pos, state)
+        }
+    }
 }
