@@ -18,8 +18,6 @@ which made this a substantially easier process :)
 Below is a non-exhaustive list of current issues and missing functionality: 
 
 - Fields act as though they've got the Block Cutter upgrade all the time!
-- Fields do not regenerate when damaged.
-- Overlapping fields will eat one-another's blocks when one is toggled.
 - Projectors cannot connect to cores and have infinite power.
 - Projectors are only ever spheres.
 - Projectors don't have a GUI.
