@@ -62,6 +62,10 @@ object ForceFieldBlock : Block(Material.BARRIER) {
 
     override fun onEntityCollision(world: World, pos: BlockPos, state: IBlockState, entity: Entity) {
         // FIXME: zapper shouldn't always be on!
+        if (world.isRemote) {
+            return
+        }
+        
         if (entity is EntityLivingBase) {
             entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 1f)
         }
