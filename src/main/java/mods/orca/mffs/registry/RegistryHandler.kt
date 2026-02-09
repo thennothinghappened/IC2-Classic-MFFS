@@ -49,7 +49,7 @@ object RegistryHandler {
 
         // Register accompanying [ItemBlock]s for blocks which use them.
         blocks
-            .mapNotNull { it as? BlockWithItem }
+            .filterIsInstance<BlockWithItem>()
             .forEach { event.registry.register(it.itemBlock) }
 
     }
