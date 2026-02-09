@@ -58,7 +58,6 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs.add("-Xjvm-default=all")
-        freeCompilerArgs.add("-Xcontext-receivers")
     }
 
     jvmToolchain(8)

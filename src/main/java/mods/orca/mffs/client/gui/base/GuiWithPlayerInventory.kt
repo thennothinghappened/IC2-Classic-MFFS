@@ -29,7 +29,7 @@ abstract class GuiWithPlayerInventory<T : Container>(
 
         fontRenderer.drawString(
             text = displayName,
-            x = fontRenderer.getStringCenteredOffsetX(displayName),
+            x = fontRenderer.getStringCenteredOffsetX(displayName, xSize),
             y = 6,
             color = GuiColour.Text
         )

@@ -18,12 +18,3 @@ fun FontRenderer.drawString(text: String, x: Int, y: Int, color: GuiColour) {
  */
 fun FontRenderer.getStringCenteredOffsetX(text: String, containerWidth: Int) =
     (containerWidth / 2) - (getStringWidth(text) / 2)
-
-/**
- * Get the centred X-position of text within the current container.
- *
- * @param text The text to measure.
- */
-context(GuiContainer)
-fun FontRenderer.getStringCenteredOffsetX(text: String) =
-    getStringCenteredOffsetX(text, xSize)
