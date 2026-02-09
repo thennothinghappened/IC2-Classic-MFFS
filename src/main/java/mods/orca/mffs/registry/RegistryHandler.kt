@@ -6,6 +6,7 @@ import mods.orca.mffs.blocks.BlockWithItem
 import mods.orca.mffs.blocks.base.BlockTileEntity
 import mods.orca.mffs.blocks.core.BlockForceFieldCore
 import mods.orca.mffs.blocks.projector.BlockFieldProjector
+import mods.orca.mffs.client.MFFSTab
 import mods.orca.mffs.items.ItemFrequencyCard
 import mods.orca.mffs.items.ItemFrequencyCardBlank
 import net.minecraft.block.Block
@@ -44,7 +45,6 @@ object RegistryHandler {
     @JvmStatic
     @SubscribeEvent
     fun onItemRegister(event: RegistryEvent.Register<Item>) {
-
         items.forEach(event.registry::register)
 
         // Register accompanying [ItemBlock]s for blocks which use them.
@@ -52,6 +52,7 @@ object RegistryHandler {
             .filterIsInstance<BlockWithItem>()
             .forEach { event.registry.register(it.itemBlock) }
 
+        MFFSTab.setup()
     }
 
     /**

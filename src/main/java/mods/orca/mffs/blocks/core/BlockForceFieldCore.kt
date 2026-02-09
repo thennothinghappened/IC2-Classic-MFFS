@@ -30,7 +30,6 @@ object BlockForceFieldCore : BlockUpgradableMachine<TileForceFieldCore>(TileForc
     init {
         setRegistryName(NAME)
         setTranslationKey(MFFSMod.translationKey(NAME))
-        setCreativeTab(MFFSTab)
     }
 
     override fun createTileEntity(world: World, state: IBlockState): TileForceFieldCore {
