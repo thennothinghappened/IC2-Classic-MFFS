@@ -1,13 +1,14 @@
 package mods.orca.mffs.container
 
 import mods.orca.mffs.MFFSMod
+import mods.orca.mffs.blocks.core.gui.ForceFieldCoreContainer
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import mods.orca.mffs.blocks.core.ForceFieldCoreTile
 import mods.orca.mffs.blocks.projector.ProjectorGui
 import mods.orca.mffs.blocks.projector.ProjectorGuiContainer
 import mods.orca.mffs.blocks.projector.TileFieldProjector
-import mods.orca.mffs.client.gui.GuiForceFieldCore
+import mods.orca.mffs.blocks.core.gui.ForceFieldCoreGui
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Container
@@ -52,7 +53,7 @@ object MFFSGuiHandler : IGuiHandler {
     ): Container? = when (id) {
         Gui.Core.ordinal -> world.getTileEntity(BlockPos(x, y, z))
             ?.let { it as? ForceFieldCoreTile }
-            ?.let { ContainerForceFieldCore(player.inventory, it) }
+            ?.let { ForceFieldCoreContainer(player.inventory, it) }
 
         Gui.Projector.ordinal -> {
             val projector = world.getTileEntity(BlockPos(x, y, z)) as? TileFieldProjector
@@ -84,7 +85,7 @@ object MFFSGuiHandler : IGuiHandler {
         val container = getServerGuiElement(id, player, world, x, y, z) ?: return null
 
         return when (id) {
-            Gui.Core.ordinal -> GuiForceFieldCore(container as ContainerForceFieldCore)
+            Gui.Core.ordinal -> ForceFieldCoreGui(container as ForceFieldCoreContainer)
             Gui.Projector.ordinal -> ProjectorGui(container as ProjectorGuiContainer)
 
     //        GuiId.CamouflageUpgrade.ordinal -> getServerGuiElement(id, player, world, x, y, z)

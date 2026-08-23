@@ -1,6 +1,7 @@
-package mods.orca.mffs.container
+package mods.orca.mffs.blocks.core.gui
 
 import mods.orca.mffs.blocks.core.ForceFieldCoreTile
+import mods.orca.mffs.container.ContainerWithPlayerInventory
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.InventoryPlayer
@@ -9,12 +10,10 @@ import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.SlotItemHandler
 
 /**
- * Container for the [ForceFieldCoreTile] block.
+ * Container for the [mods.orca.mffs.blocks.core.ForceFieldCoreTile] block.
  */
-class ContainerForceFieldCore(
-    inventoryPlayer: InventoryPlayer,
-    private val core: ForceFieldCoreTile
-) : ContainerWithPlayerInventory(inventoryPlayer, 142) {
+class ForceFieldCoreContainer(inventoryPlayer: InventoryPlayer, private val core: ForceFieldCoreTile)
+    : ContainerWithPlayerInventory(inventoryPlayer, 142) {
 
     /**
      * The amount of energy the core has.

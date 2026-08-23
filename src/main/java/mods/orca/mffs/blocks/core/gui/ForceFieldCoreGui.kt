@@ -1,4 +1,4 @@
-package mods.orca.mffs.client.gui
+package mods.orca.mffs.blocks.core.gui
 
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
@@ -7,10 +7,9 @@ import mods.orca.mffs.client.gui.base.GuiWithPlayerInventory
 import mods.orca.mffs.client.gui.utils.GuiColour
 import mods.orca.mffs.client.gui.utils.drawString
 import mods.orca.mffs.client.gui.utils.getStringCenteredOffsetX
-import mods.orca.mffs.container.ContainerForceFieldCore
 
 @SideOnly(Side.CLIENT)
-class GuiForceFieldCore(container: ContainerForceFieldCore) : GuiWithPlayerInventory<ContainerForceFieldCore>(
+class ForceFieldCoreGui(container: ForceFieldCoreContainer) : GuiWithPlayerInventory<ForceFieldCoreContainer>(
     container,
     "core",
     MFFSMod.resource("textures/gui/projector.png")
