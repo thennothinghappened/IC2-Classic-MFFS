@@ -1,9 +1,12 @@
 package mods.orca.mffs.blocks.core
 
 import ic2.api.energy.tile.IEnergyEmitter
+import mods.orca.mffs.CoreId
+import mods.orca.mffs.WorldFieldManager
 import mods.orca.mffs.blocks.base.tile.TileMachine
 import mods.orca.mffs.items.ItemFrequencyCard
 import mods.orca.mffs.items.ItemFrequencyCardBlank
+import mods.orca.mffs.registry.Registry
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -14,20 +17,23 @@ import net.minecraftforge.items.ItemStackHandler
 /**
  * The Tile entity for the force-field core, which stores the power and on/off state of the assembly.
  */
-class TileForceFieldCore : TileMachine(10000000.0) {
+class ForceFieldCoreTile : TileMachine(10000000.0) {
+    /**
+     * Unique ID of this core.
+     */
+    val coreId: CoreId
+        get() = WorldFieldManager.get(world).getCoreId(this)
 
     /**
      * The inventory for the core, which simply contains a slot for linking frequency cards to this core.
      */
     private val inventory = object : ItemStackHandler(1) {
-
         override fun isItemValid(slot: Int, stack: ItemStack) =
             stack.item is ItemFrequencyCardBlank
 
         override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
             return if (isItemValid(slot, stack)) super.insertItem(slot, stack, simulate) else stack
         }
-
     }
 
     /**
@@ -38,7 +44,6 @@ class TileForceFieldCore : TileMachine(10000000.0) {
      * @return A 'burnt' MFFS card that points to this block position to put into a projector.
      */
     fun linkBlankCardStack(stack: ItemStack): ItemStack? {
-
         if (stack.isEmpty) {
             return null
         }
@@ -48,12 +53,19 @@ class TileForceFieldCore : TileMachine(10000000.0) {
         }
 
         val nbt = NBTTagCompound().apply {
-            setIntArray(ItemFrequencyCard.NBTKey.CorePos.name, intArrayOf(pos.x, pos.y, pos.z))
+            setInteger(ItemFrequencyCard.NBTKey.CoreId.name, coreId.value)
         }
 
-        return ItemStack(ItemFrequencyCard, stack.count, 0)
+        return ItemStack(Registry.Items.frequencyCard, stack.count, 0)
             .apply { tagCompound = nbt }
+    }
 
+    fun onDestroy() {
+        if (!hasWorld() || world.isRemote) {
+            return
+        }
+
+        WorldFieldManager.get(world).removeCore(this)
     }
 
     override fun writeToNBT(compound: NBTTagCompound): NBTTagCompound {
@@ -66,42 +78,31 @@ class TileForceFieldCore : TileMachine(10000000.0) {
         super.readFromNBT(compound)
     }
 
-    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?) =
-        when {
-            capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY -> true
-            else -> super.hasCapability(capability, facing)
-        }
+    override fun hasCapability(capability: Capability<*>, facing: EnumFacing?) = when {
+        capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY -> true
+        else -> super.hasCapability(capability, facing)
+    }
 
-    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? =
-        when {
-
-            capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY -> {
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory)
-            }
-
-            else -> {
-                super.getCapability(capability, facing)
-            }
-
-        }
+    override fun <T> getCapability(capability: Capability<T>, facing: EnumFacing?): T? = when {
+        capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY -> CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory)
+        else -> super.getCapability(capability, facing)
+    }
 
     /**
      * Accept blank frequency cards piped into the machine. Why you'd want to automate putting blanks into a core I
      * frankly have no idea, but hey. You can!
      */
-    override fun isValidInput(itemStack: ItemStack?): Boolean =
-        itemStack
-            ?.takeUnless { it.isEmpty }
-            ?.let { it.item is ItemFrequencyCardBlank }
-            ?: false
+    override fun isValidInput(itemStack: ItemStack): Boolean =
+        itemStack.item === Registry.Items.frequencyCardBlank
 
-    override fun acceptsEnergyFrom(emitter: IEnergyEmitter?, facing: EnumFacing?) =
-        true
+    // We don't directly accept energy, it can only be input by the EU injector (presumably this was originally a cross-
+    // compatibility thing in MFFS, but I'm going for nostalgia!)
+    override fun acceptsEnergyFrom(emitter: IEnergyEmitter, facing: EnumFacing) = false
 
-    override fun getSinkTier(): Int = 3
+    override fun getSinkTier(): Int = IC2_TIER
 
-    private companion object {
-        const val NBT_KEY_INVENTORY = "inventory"
+    companion object {
+        private const val NBT_KEY_INVENTORY = "inventory"
+        const val IC2_TIER = 3
     }
-
 }

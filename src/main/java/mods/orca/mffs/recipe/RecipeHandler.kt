@@ -2,9 +2,10 @@ package mods.orca.mffs.recipe
 
 import ic2.api.classic.recipe.ClassicRecipes
 import ic2.api.item.IC2Items
-import mods.orca.mffs.blocks.core.BlockForceFieldCore
+import mods.orca.mffs.blocks.core.ForceFieldCoreBlock
 import mods.orca.mffs.items.ItemFrequencyCard
 import mods.orca.mffs.items.ItemFrequencyCardBlank
+import mods.orca.mffs.registry.Registry
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 
@@ -24,7 +25,7 @@ object RecipeHandler {
     private fun addItemRecipes() {
 
         ClassicRecipes.advCrafting.addRecipe(
-            ItemStack(ItemFrequencyCardBlank),
+            ItemStack(Registry.Items.frequencyCardBlank),
 
             "PPP",
             "PCP",
@@ -36,8 +37,8 @@ object RecipeHandler {
 
         // Convert a card back to a blank.
         ClassicRecipes.advCrafting.addShapelessRecipe(
-            ItemStack(ItemFrequencyCardBlank),
-            ItemStack(ItemFrequencyCard)
+            ItemStack(Registry.Items.frequencyCardBlank),
+            ItemStack(Registry.Items.frequencyCard)
         )
 
     }
@@ -45,7 +46,7 @@ object RecipeHandler {
     private fun addBlockRecipes() {
 
         ClassicRecipes.advCrafting.addRecipe(
-            ItemStack(BlockForceFieldCore),
+            ItemStack(Registry.Blocks.forceFieldCore),
 
             "WAW",
             "CFC",

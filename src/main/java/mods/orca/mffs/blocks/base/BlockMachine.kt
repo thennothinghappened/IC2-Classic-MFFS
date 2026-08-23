@@ -48,7 +48,6 @@ abstract class BlockMachine<TE : TileEntity>(
 
     // Add a chance for the machine to drop things like its internal inventory.
     override fun breakBlock(world: World, pos: BlockPos, state: IBlockState) {
-
         val extraDrops = NonNullList.create<ItemStack>()
         getExtraDrops(extraDrops, world, pos, state)
 
@@ -69,11 +68,9 @@ abstract class BlockMachine<TE : TileEntity>(
         player: EntityPlayer,
         fortune: Int
     ): List<ItemStack> {
-
         val drops = NonNullList.create<ItemStack>()
         getDrops(drops, world, pos, state, fortune)
 
         return drops
     }
-
 }

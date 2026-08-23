@@ -1,6 +1,6 @@
 package mods.orca.mffs.container
 
-import mods.orca.mffs.blocks.core.TileForceFieldCore
+import mods.orca.mffs.blocks.core.ForceFieldCoreTile
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.entity.player.InventoryPlayer
@@ -9,12 +9,12 @@ import net.minecraftforge.items.CapabilityItemHandler
 import net.minecraftforge.items.SlotItemHandler
 
 /**
- * Container for the [TileForceFieldCore] block.
+ * Container for the [ForceFieldCoreTile] block.
  */
 class ContainerForceFieldCore(
     inventoryPlayer: InventoryPlayer,
-    private val core: TileForceFieldCore
-) : ContainerBase(inventoryPlayer, 142) {
+    private val core: ForceFieldCoreTile
+) : ContainerWithPlayerInventory(inventoryPlayer, 142) {
 
     /**
      * The amount of energy the core has.
@@ -75,7 +75,7 @@ class ContainerForceFieldCore(
     }
 
     /**
-     * We can interact with this container so long as the [TileForceFieldCore] we're attached to remains valid.
+     * We can interact with this container so long as the [ForceFieldCoreTile] we're attached to remains valid.
      */
     override fun canInteractWith(player: EntityPlayer) =
         !core.isInvalid

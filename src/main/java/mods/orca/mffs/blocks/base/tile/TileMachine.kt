@@ -82,15 +82,11 @@ abstract class TileMachine(val maxEnergy: Double) : TileEntity(), IMachine, IEne
     }
 
     override fun onDataPacket(net: NetworkManager, pkt: SPacketUpdateTileEntity) {
-
         when (net.direction) {
-
             EnumPacketDirection.CLIENTBOUND -> {
-
                 // the server should never be receiving power updates from a client
                 // only the client will get updates from the server.
                 readFromNBT(pkt.nbtCompound)
-
             }
 
             EnumPacketDirection.SERVERBOUND -> {
@@ -98,9 +94,7 @@ abstract class TileMachine(val maxEnergy: Double) : TileEntity(), IMachine, IEne
             }
 
             else -> Unit
-
         }
-
     }
 
     override fun useEnergy(amount: Double, simulate: Boolean): Boolean {

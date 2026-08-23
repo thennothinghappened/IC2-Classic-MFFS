@@ -8,19 +8,13 @@ import mods.orca.mffs.client.gui.utils.GuiColour
 import mods.orca.mffs.client.gui.utils.drawString
 import mods.orca.mffs.client.gui.utils.getStringCenteredOffsetX
 import mods.orca.mffs.container.ContainerForceFieldCore
-import net.minecraft.entity.player.InventoryPlayer
 
 @SideOnly(Side.CLIENT)
-class GuiForceFieldCore(
-    container: ContainerForceFieldCore,
-    inventoryPlayer: InventoryPlayer
-) : GuiWithPlayerInventory<ContainerForceFieldCore>(
+class GuiForceFieldCore(container: ContainerForceFieldCore) : GuiWithPlayerInventory<ContainerForceFieldCore>(
     container,
-    inventoryPlayer,
     "core",
     MFFSMod.resource("textures/gui/projector.png")
 ) {
-
     init {
         ySize = GUI_HEIGHT
     }
@@ -124,5 +118,4 @@ class GuiForceFieldCore(
         const val POWER_METER_TEXT_LINE_HEIGHT = 10
         const val GUI_HEIGHT = 224
     }
-
 }

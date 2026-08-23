@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "all": "mffs:blocks/eu_injector_off"
+    },
+    "model": "cube_all"
+  },
+  "variants": {
+    "active": {
+      "true": {
+        "textures": {
+          "all": "mffs:blocks/eu_injector_on"
+        },
+        "model": "cube_all"
+      },
+      "false": {
+        "model": "cube_all"
+      }
+    },
+    "inventory": {
+      "model": "cube_all"
+    }
+  }
+}

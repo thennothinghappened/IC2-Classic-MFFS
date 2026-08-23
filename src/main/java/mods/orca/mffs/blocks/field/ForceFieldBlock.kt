@@ -17,8 +17,10 @@ import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
 @Suppress("OVERRIDE_DEPRECATION")
-object ForceFieldBlock : Block(Material.BARRIER) {
-    private const val NAME = "forcefield"
+class ForceFieldBlock : Block(Material.BARRIER) {
+    companion object {
+        private const val NAME = "forcefield"
+    }
 
     init {
         setRegistryName(NAME)
@@ -41,7 +43,7 @@ object ForceFieldBlock : Block(Material.BARRIER) {
 
     override fun breakBlock(world: World, pos: BlockPos, state: IBlockState) {
         val fieldManager = WorldFieldManager.getOrNull(world) ?: return
-        val owner = fieldManager.getOwnerId(pos)
+        val owner = fieldManager.getOwningProjector(pos)
 
         if (owner != null) {
             // Re-generate the field!

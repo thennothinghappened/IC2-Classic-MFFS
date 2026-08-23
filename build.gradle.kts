@@ -44,7 +44,6 @@ repositories {
 }
 
 dependencies {
-
     shadow("org.jetbrains.kotlin:kotlin-stdlib:${kotlin.coreLibrariesVersion}")
     shadow("org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin.coreLibrariesVersion}")
 
@@ -52,6 +51,7 @@ dependencies {
     implementation("curse.maven:ic2_classic-242942:5167044")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
     implementation("com.michael-bull.kotlin-result:kotlin-result:2.1.0")
+    implementation(kotlin("reflect"))
 }
 
 kotlin {

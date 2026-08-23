@@ -1,10 +1,9 @@
 package mods.orca.mffs.blocks.projector
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.WorldFieldManager
-import mods.orca.mffs.blocks.utils.serializedStateOrNull
+import mods.orca.mffs.blocks.utils.stateNbt
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
@@ -21,7 +20,7 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
             markDirty()
         }
 
-    fun isActive() = WorldFieldManager.getOrThrow(world).isFieldEnabled(this)
+    fun isActive() = WorldFieldManager.get(world).isFieldEnabled(this)
 
     // Constructor to make forge happy when restoring the entity.
     @Suppress("unused")
@@ -34,7 +33,7 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
             return
         }
 
-        WorldFieldManager.getOrCreate(world).registerProjector(this)
+        WorldFieldManager.get(world).registerProjector(this)
     }
 
     fun onDestroy() {
@@ -42,7 +41,7 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
             return
         }
 
-        val fieldManager = WorldFieldManager.getOrThrow(world)
+        val fieldManager = WorldFieldManager.get(world)
 
         if (fieldManager.isFieldEnabled(this)) {
             deactivateField()
@@ -53,12 +52,12 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
 
     fun activateField() {
         require(!isActive()) { "Field must NOT be already active when activating it" }
-        WorldFieldManager.getOrThrow(world).enableField(this)
+        WorldFieldManager.get(world).enableField(this)
     }
 
     fun deactivateField() {
         require(isActive()) { "Field must be active when deactivating it" }
-        WorldFieldManager.getOrThrow(world).disableField(this)
+        WorldFieldManager.get(world).disableField(this)
     }
 
     fun testExpandingTheField() {
@@ -66,7 +65,7 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
             return
         }
 
-        val fieldManager = WorldFieldManager.getOrThrow(world)
+        val fieldManager = WorldFieldManager.get(world)
         val isFieldEnabled = isActive()
 
         if (isFieldEnabled) {
@@ -102,25 +101,13 @@ class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
         return field
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun readFromNBT(compound: NBTTagCompound) {
         super.readFromNBT(compound)
-
-        serializedStateOrNull?.let { serializedState ->
-            try {
-                state = MFFSMod.nbt.decode(serializedState)
-                MFFSMod.logger.debug("Decoded State: {}", state)
-            } catch (err: Exception) {
-                MFFSMod.logger.error("Error decoding!: ", err)
-            }
-        }
+        state = MFFSMod.nbt.decode(stateNbt ?: return)
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun writeToNBT(compound: NBTTagCompound): NBTTagCompound {
-        serializedStateOrNull = MFFSMod.nbt.encode(state)
-        MFFSMod.logger.debug("Encoded State: {}", serializedStateOrNull)
-
+        stateNbt = MFFSMod.nbt.encode(state)
         return super.writeToNBT(compound)
     }
 

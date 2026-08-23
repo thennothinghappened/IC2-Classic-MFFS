@@ -13,7 +13,7 @@ private const val NBT_SERIALIZED_STATE_KEY = "serializedState"
  * Entity state stored as some arbitrary NBT data that may be read and written during the (de)serialization methods to
  * save and restore the block's state information.
  */
-var TileEntity.serializedStateOrNull: NBTBase?
+var TileEntity.stateNbt: NBTBase?
     get() = tileData.getTagOrNull(NBT_SERIALIZED_STATE_KEY)
     set(value) {
         if (value != null) {
@@ -30,11 +30,11 @@ interface HasNbtState<T>
 
 inline fun <C, reified T> C.serialize(state: T)
         where C : TileEntity, C : HasNbtState<T> {
-    serializedStateOrNull = MFFSMod.nbt.encode(state)
+    stateNbt = MFFSMod.nbt.encode(state)
 }
 
 inline fun <C, reified T> C.deserialize(): Result<T, Throwable>?
         where C : TileEntity, C : HasNbtState<T> =
-    serializedStateOrNull?.let { it ->
+    stateNbt?.let { it ->
         runCatching { MFFSMod.nbt.decode<T>(it) }
     }

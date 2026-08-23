@@ -16,8 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly
  * @param bgTexture Texture to use for drawing the background.
  */
 @SideOnly(Side.CLIENT)
-abstract class GuiBase<T : Container>(
-    protected val container: T,
+abstract class GuiBase<C : Container>(
+    protected val container: C,
     private val translationKey: String,
     private val bgTexture: ResourceLocation
 ) : GuiContainer(container) {

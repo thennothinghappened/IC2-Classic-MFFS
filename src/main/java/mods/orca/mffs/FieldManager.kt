@@ -1,9 +1,9 @@
 package mods.orca.mffs
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import mods.orca.mffs.blocks.field.ForceFieldBlock
+import mods.orca.mffs.blocks.core.ForceFieldCoreTile
 import mods.orca.mffs.blocks.projector.TileFieldProjector
+import mods.orca.mffs.registry.Registry
 import mods.orca.mffs.utils.mutableTwoWayMapOf
 import mods.orca.mffs.utils.nbt.serializers.BlockPosSerializer
 import net.minecraft.nbt.NBTTagCompound
@@ -18,6 +18,9 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
     private val projectorPositionById = mutableTwoWayMapOf<Int, BlockPos>()
     private val projectorPropsById = mutableMapOf<Int, ProjectorProps>()
 
+    private val cores = mutableTwoWayMapOf<CoreId, BlockPos>()
+    private var nextCoreId: CoreId = CoreId(0)
+
     companion object {
         private const val DATA_NAME = "${MFFSMod.modId}_FieldManager"
 
@@ -26,14 +29,10 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
             return world.perWorldStorage.getOrLoadData(WorldFieldManager::class.java, DATA_NAME) as WorldFieldManager?
         }
 
-        fun getOrCreate(world: World): WorldFieldManager {
+        fun get(world: World): WorldFieldManager {
             return getOrNull(world) ?: WorldFieldManager(DATA_NAME).also {
                 world.perWorldStorage.setData(DATA_NAME, it)
             }
-        }
-
-        fun getOrThrow(world: World): WorldFieldManager {
-            return getOrNull(world) ?: error("Field manager for world $world is null")
         }
     }
 
@@ -85,8 +84,8 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         props.field = field
 
         field.forEach { pos ->
-            if (getOwnerId(pos) == id) {
-                projector.world.setBlockState(pos, ForceFieldBlock.defaultState)
+            if (getOwningProjector(pos) == id) {
+                projector.world.setBlockState(pos, Registry.Blocks.forceField.defaultState)
             }
         }
 
@@ -101,7 +100,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         props.field = null
 
         field.forEach { pos ->
-            if (getOwnerId(pos) == null) {
+            if (getOwningProjector(pos) == null) {
                 projector.world.setBlockToAir(pos)
             }
         }
@@ -113,10 +112,25 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         return projectorProps(projector).field != null
     }
 
-    fun getOwnerId(fieldBlockPos: BlockPos): Int? {
+    fun getOwningProjector(fieldBlockPos: BlockPos): Int? {
         return projectorPropsById.firstNotNullOfOrNull { (id, props) ->
             if (props.field?.contains(fieldBlockPos) == true) id else null
         }
+    }
+
+    fun getCoreId(core: ForceFieldCoreTile): CoreId {
+        var coreId = cores.inverse[core.pos]
+
+        if (coreId == null) {
+            coreId = nextCoreId
+            nextCoreId = CoreId(nextCoreId.value + 1)
+        }
+
+        return coreId
+    }
+
+    fun removeCore(core: ForceFieldCoreTile) {
+        cores.inverse.remove(core.pos)
     }
 
     private fun projectorIdOrNull(projector: TileFieldProjector): Int? {
@@ -135,24 +149,27 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         return projectorPropsById[projectorId(projector)] ?: error("Projector at ${projector.pos} is unregistered, cannot get its props")
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun readFromNBT(nbt: NBTTagCompound) {
         try {
             val state = MFFSMod.nbt.decode<State>(nbt)
 
             projectorPositionById.clear()
             projectorPropsById.clear()
+            cores.clear()
 
             state.projectors.forEach { (id, savedProjectorProps) ->
                 projectorPositionById[id] = savedProjectorProps.pos
                 projectorPropsById[id] = savedProjectorProps.props
+            }
+
+            state.cores.forEach { (id, pos) ->
+                cores[id] = pos
             }
         } catch (error: Exception) {
             MFFSMod.logger.error("Error whilst restoring FieldManager state: ", error)
         }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun writeToNBT(compound: NBTTagCompound): NBTTagCompound {
         val state = State(
             projectors = projectorPositionById.mapValues { (id, pos) ->
@@ -160,7 +177,9 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
                     pos = pos,
                     props = projectorPropsById[id]!!
                 )
-            }
+            },
+            cores = cores,
+            nextCoreId = nextCoreId,
         )
 
         val serializedState = MFFSMod.nbt.encode(state) as NBTTagCompound
@@ -171,7 +190,9 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
 
     @Serializable
     private data class State(
-        val projectors: Map<Int, SavedProjectorProps>
+        val projectors: Map<Int, SavedProjectorProps>,
+        val cores: Map<CoreId, @Serializable(BlockPosSerializer::class) BlockPos>,
+        val nextCoreId: CoreId,
     ) {
         @Serializable
         data class SavedProjectorProps(
@@ -185,3 +206,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         var field: Set<@Serializable(BlockPosSerializer::class) BlockPos>? = null
     )
 }
+
+@JvmInline
+@Serializable
+value class CoreId(val value: Int)

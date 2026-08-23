@@ -1,7 +1,7 @@
 package mods.orca.mffs;
 
 import mods.orca.mffs.proxy.Proxy;
-import mods.orca.mffs.registry.RegistryHandler;
+import mods.orca.mffs.registry.Registry;
 import mods.orca.mffs.utils.nbt.NbtFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,7 +39,7 @@ public class MFFSMod {
 
     public MFFSMod() {
         instance = this;
-        MinecraftForge.EVENT_BUS.register(RegistryHandler.class);
+        MinecraftForge.EVENT_BUS.register(Registry.class);
     }
 
     @SidedProxy(
