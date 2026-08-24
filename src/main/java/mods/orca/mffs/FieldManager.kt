@@ -123,7 +123,11 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
 
         if (coreId == null) {
             coreId = nextCoreId
+
             nextCoreId = CoreId(nextCoreId.value + 1)
+            cores[coreId] = core.pos
+
+            markDirty()
         }
 
         return coreId
@@ -131,6 +135,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
 
     fun removeCore(core: ForceFieldCoreTile) {
         cores.inverse.remove(core.pos)
+        markDirty()
     }
 
     private fun projectorIdOrNull(projector: TileFieldProjector): Int? {
@@ -165,6 +170,8 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
             state.cores.forEach { (id, pos) ->
                 cores[id] = pos
             }
+
+            nextCoreId = state.nextCoreId
         } catch (error: Exception) {
             MFFSMod.logger.error("Error whilst restoring FieldManager state: ", error)
         }
