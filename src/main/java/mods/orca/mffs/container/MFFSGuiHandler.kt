@@ -4,11 +4,10 @@ import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.blocks.core.gui.ForceFieldCoreContainer
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
-import mods.orca.mffs.blocks.core.ForceFieldCoreTile
 import mods.orca.mffs.blocks.projector.ProjectorGui
 import mods.orca.mffs.blocks.projector.ProjectorGuiContainer
-import mods.orca.mffs.blocks.projector.TileFieldProjector
 import mods.orca.mffs.blocks.core.gui.ForceFieldCoreGui
+import mods.orca.mffs.registry.Registry
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Container
@@ -51,24 +50,13 @@ object MFFSGuiHandler : IGuiHandler {
         y: Int,
         z: Int
     ): Container? = when (id) {
-        Gui.Core.ordinal -> world.getTileEntity(BlockPos(x, y, z))
-            ?.let { it as? ForceFieldCoreTile }
-            ?.let { ForceFieldCoreContainer(player.inventory, it) }
-
-        Gui.Projector.ordinal -> {
-            val projector = world.getTileEntity(BlockPos(x, y, z)) as? TileFieldProjector
-
-            if (projector != null) {
-                ProjectorGuiContainer(player.inventory, projector)
-            } else {
-                null
-            }
+        Gui.Core.ordinal -> Registry.Blocks.forceFieldCore.getTileEntity(world, BlockPos(x, y, z))?.let {
+            ForceFieldCoreContainer(player.inventory, it)
         }
 
-//        GuiId.CamouflageUpgrade.ordinal -> ContainerUpgradeCamo(
-//            player.inventory,
-//            world.getTileEntity(BlockPos(x, y, z)) as? TileCore
-//        )
+        Gui.Projector.ordinal -> Registry.Blocks.fieldProjector.getTileEntity(world, BlockPos(x, y, z))?.let {
+            ProjectorGuiContainer(player.inventory, it)
+        }
 
         else -> null
     }
@@ -87,15 +75,6 @@ object MFFSGuiHandler : IGuiHandler {
         return when (id) {
             Gui.Core.ordinal -> ForceFieldCoreGui(container as ForceFieldCoreContainer)
             Gui.Projector.ordinal -> ProjectorGui(container as ProjectorGuiContainer)
-
-    //        GuiId.CamouflageUpgrade.ordinal -> getServerGuiElement(id, player, world, x, y, z)
-    //            ?.let { container ->
-    //                GuiUpgradeCamo(
-    //                    container,
-    //                    player.inventory
-    //                )
-    //            }
-
             else -> error("Mismatched GUI container list")
         }
     }

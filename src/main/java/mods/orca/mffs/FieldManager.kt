@@ -2,7 +2,7 @@ package mods.orca.mffs
 
 import kotlinx.serialization.Serializable
 import mods.orca.mffs.blocks.core.ForceFieldCoreTile
-import mods.orca.mffs.blocks.projector.TileFieldProjector
+import mods.orca.mffs.blocks.projector.FieldProjectorTile
 import mods.orca.mffs.registry.Registry
 import mods.orca.mffs.utils.mutableTwoWayMapOf
 import mods.orca.mffs.utils.nbt.serializers.BlockPosSerializer
@@ -40,7 +40,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
      * Register a new projector in the system. On state restoration, existing projectors will be assigned their original
      * ID.
      */
-    fun registerProjector(projector: TileFieldProjector) {
+    fun registerProjector(projector: FieldProjectorTile) {
         // If an entry already exists, no work to do!
         projectorIdOrNull(projector)?.let {
             MFFSMod.logger.debug("FieldManager::registerProjector: Shortcutting already-registered projector {} at {}", it, projector.pos)
@@ -63,7 +63,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
     /**
      * Remove a projector from the registry (i.e., it has been destroyed.)
      */
-    fun deregisterProjector(projector: TileFieldProjector) {
+    fun deregisterProjector(projector: FieldProjectorTile) {
         val id = projectorIdOrNull(projector) ?: return
 
         MFFSMod.logger.debug("FieldManager::deregisterProjector: removing projector {} at {}", id, projector.pos)
@@ -76,7 +76,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         markDirty()
     }
 
-    fun enableField(projector: TileFieldProjector) {
+    fun enableField(projector: FieldProjectorTile) {
         val id = projectorId(projector)
         val props = projectorProps(projector)
 
@@ -92,7 +92,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         markDirty()
     }
 
-    fun disableField(projector: TileFieldProjector) {
+    fun disableField(projector: FieldProjectorTile) {
         val id = projectorId(projector)
         val props = projectorProps(projector)
 
@@ -108,7 +108,7 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         markDirty()
     }
 
-    fun isFieldEnabled(projector: TileFieldProjector): Boolean {
+    fun isFieldEnabled(projector: FieldProjectorTile): Boolean {
         return projectorProps(projector).field != null
     }
 
@@ -138,19 +138,19 @@ class WorldFieldManager(name: String) : WorldSavedData(name) {
         markDirty()
     }
 
-    private fun projectorIdOrNull(projector: TileFieldProjector): Int? {
+    private fun projectorIdOrNull(projector: FieldProjectorTile): Int? {
         return projectorPositionById.inverse[projector.pos]
     }
 
-    private fun projectorId(projector: TileFieldProjector): Int {
+    private fun projectorId(projector: FieldProjectorTile): Int {
         return projectorIdOrNull(projector) ?: error("Cannot get ID of unregistered projector at ${projector.pos}")
     }
 
-    private fun projectorPropsOrNull(projector: TileFieldProjector): ProjectorProps? {
+    private fun projectorPropsOrNull(projector: FieldProjectorTile): ProjectorProps? {
         return projectorIdOrNull(projector)?.let { projectorPropsById[it] }
     }
 
-    private fun projectorProps(projector: TileFieldProjector): ProjectorProps {
+    private fun projectorProps(projector: FieldProjectorTile): ProjectorProps {
         return projectorPropsById[projectorId(projector)] ?: error("Projector at ${projector.pos} is unregistered, cannot get its props")
     }
 

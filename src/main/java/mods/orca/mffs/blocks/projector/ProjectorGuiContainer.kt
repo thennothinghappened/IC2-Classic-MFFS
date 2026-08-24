@@ -10,7 +10,7 @@ import net.minecraftforge.items.SlotItemHandler
 
 class ProjectorGuiContainer(
     inventoryPlayer: InventoryPlayer,
-    private val projector: TileFieldProjector,
+    private val projector: FieldProjectorTile,
 ) : ContainerWithPlayerInventory(inventoryPlayer, 142) {
     init {
         val inventory = projector.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)

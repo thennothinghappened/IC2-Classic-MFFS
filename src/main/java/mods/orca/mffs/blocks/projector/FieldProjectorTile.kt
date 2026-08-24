@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import kotlin.math.absoluteValue
 
-class TileFieldProjector(sdf: FieldPerimeterSdf) : TileEntity() {
+class FieldProjectorTile(sdf: FieldPerimeterSdf) : TileEntity() {
     var state = State(sdf)
         private set
 

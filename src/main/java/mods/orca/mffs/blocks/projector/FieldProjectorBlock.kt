@@ -3,8 +3,7 @@ package mods.orca.mffs.blocks.projector
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.blocks.BlockWithItem
 import mods.orca.mffs.blocks.base.BlockMachine
-import mods.orca.mffs.blocks.base.BlockTileEntity
-import mods.orca.mffs.client.MFFSTab
+import mods.orca.mffs.blocks.base.BlockWithEntity
 import mods.orca.mffs.container.MFFSGuiHandler
 import mods.orca.mffs.items.ItemFrequencyCard
 import mods.orca.mffs.registry.Registry
@@ -20,8 +19,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.items.CapabilityItemHandler
 
-class FieldProjectorBlock : BlockTileEntity<TileFieldProjector>(TileFieldProjector::class, Material.IRON),
-    BlockWithItem {
+class FieldProjectorBlock
+    : BlockWithEntity<FieldProjectorTile>(FieldProjectorTile::class, Material.IRON), BlockWithItem {
 
     companion object {
         private const val NAME = "projector"
@@ -71,8 +70,8 @@ class FieldProjectorBlock : BlockTileEntity<TileFieldProjector>(TileFieldProject
         super.breakBlock(worldIn, pos, state)
     }
 
-    override fun createTileEntity(world: World, state: IBlockState): TileFieldProjector {
-        return TileFieldProjector(FieldPerimeterSdf.Sphere())
+    override fun createTileEntity(world: World, state: IBlockState): FieldProjectorTile {
+        return FieldProjectorTile(FieldPerimeterSdf.Sphere())
     }
 
     override fun onBlockActivated(

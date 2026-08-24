@@ -3,7 +3,7 @@ package mods.orca.mffs.registry
 import mods.orca.mffs.MFFSMod
 import mods.orca.mffs.blocks.field.ForceFieldBlock
 import mods.orca.mffs.blocks.BlockWithItem
-import mods.orca.mffs.blocks.base.BlockTileEntity
+import mods.orca.mffs.blocks.base.BlockWithEntity
 import mods.orca.mffs.blocks.core.ForceFieldCoreBlock
 import mods.orca.mffs.blocks.euinjector.EuInjectorBlock
 import mods.orca.mffs.blocks.projector.FieldProjectorBlock
@@ -65,7 +65,7 @@ object Registry {
             .forEach(event.registry::register)
 
         Blocks::class.memberProperties
-            .mapNotNull { it.get(Blocks) as? BlockTileEntity<*> }
+            .mapNotNull { it.get(Blocks) as? BlockWithEntity<*> }
             .forEach { GameRegistry.registerTileEntity(it.tileEntityClass.java, it.registryName) }
     }
 

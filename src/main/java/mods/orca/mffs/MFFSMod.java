@@ -50,12 +50,10 @@ public class MFFSMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
         logger = event.getModLog();
         logger.info("Welcome to Force-fields! (" + MFFSMod.modId + " is now loading)");
 
         proxy.preInit();
-
     }
 
     @Mod.EventHandler

@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 
 abstract class BlockMachine<TE : TileEntity>(
     tileEntityClass: KClass<TE>
-) : BlockTileEntity<TE>(
+) : BlockWithEntity<TE>(
     tileEntityClass,
     Material.IRON
 ), IWrenchable {

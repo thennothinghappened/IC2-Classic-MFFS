@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 /**
  * A Block which owns a tile entity. This just class provides some helper methods for such blocks.
  */
-abstract class BlockTileEntity<TE : TileEntity>(
+abstract class BlockWithEntity<TE : TileEntity>(
     val tileEntityClass: KClass<TE>,
     material: Material
 ) : Block(material) {
