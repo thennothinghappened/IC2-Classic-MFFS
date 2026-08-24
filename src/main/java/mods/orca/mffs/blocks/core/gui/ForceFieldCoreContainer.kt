@@ -34,28 +34,10 @@ class ForceFieldCoreContainer(inventoryPlayer: InventoryPlayer, private val core
         get() = energy / maxEnergy
 
     init {
-
         val inventory = core.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)
-            ?: throw IllegalStateException("Expected Core block to have an inventory, but it wasn't present!")
+            ?: error("Expected Core block to have an inventory, but it wasn't present!")
 
-        addSlotToContainer(object : SlotItemHandler(inventory, 0, 97, 120) {
-
-            /**
-             * When the player inserts MFFS cards, we convert them into cards linked to this core.
-             */
-            override fun onSlotChanged() {
-
-                if (hasStack) {
-                    core.linkBlankCardStack(stack)
-                        ?.let { putStack(it) }
-                }
-
-                core.markDirty()
-
-            }
-
-        })
-
+        addSlotToContainer(SlotItemHandler(inventory, 0, 97, 120))
     }
 
     /**
@@ -63,14 +45,12 @@ class ForceFieldCoreContainer(inventoryPlayer: InventoryPlayer, private val core
      * slot updates.
      */
     override fun detectAndSendChanges() {
-
         super.detectAndSendChanges()
         val packet = core.updatePacket ?: return
 
         listeners
             .filterIsInstance<EntityPlayerMP>()
             .forEach { listener -> listener.connection.sendPacket(packet) }
-
     }
 
     /**
@@ -78,5 +58,4 @@ class ForceFieldCoreContainer(inventoryPlayer: InventoryPlayer, private val core
      */
     override fun canInteractWith(player: EntityPlayer) =
         !core.isInvalid
-
 }

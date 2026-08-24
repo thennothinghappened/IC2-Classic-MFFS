@@ -29,10 +29,25 @@ class ForceFieldCoreTile : TileMachine(10000000.0) {
      */
     private val inventory = object : ItemStackHandler(1) {
         override fun isItemValid(slot: Int, stack: ItemStack) =
-            stack.item is ItemFrequencyCardBlank
+            stack.item === Registry.Items.frequencyCardBlank
 
         override fun insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
             return if (isItemValid(slot, stack)) super.insertItem(slot, stack, simulate) else stack
+        }
+
+        override fun onContentsChanged(slot: Int) {
+            if (world.isRemote) {
+                return
+            }
+
+            val stack = getStackInSlot(slot)
+            val linkedCardStack = linkBlankCardStack(stack)
+
+            if (linkedCardStack != null) {
+                // We specifically avoid `setStackInSlot()` or we'll call this method pointlessly a 2nd time.
+                stacks[slot] = linkedCardStack
+                markDirty()
+            }
         }
     }
 
@@ -44,20 +59,17 @@ class ForceFieldCoreTile : TileMachine(10000000.0) {
      * @return A 'burnt' MFFS card that points to this block position to put into a projector.
      */
     fun linkBlankCardStack(stack: ItemStack): ItemStack? {
-        if (stack.isEmpty) {
+        if (stack.item !== Registry.Items.frequencyCardBlank) {
             return null
         }
 
-        if (stack.item !is ItemFrequencyCardBlank) {
-            return null
+        return ItemStack(Registry.Items.frequencyCard, stack.count, 0).apply {
+            if (!world.isRemote) {
+                tagCompound = NBTTagCompound().apply {
+                    setInteger(ItemFrequencyCard.NBTKey.CoreId.name, coreId.value)
+                }
+            }
         }
-
-        val nbt = NBTTagCompound().apply {
-            setInteger(ItemFrequencyCard.NBTKey.CoreId.name, coreId.value)
-        }
-
-        return ItemStack(Registry.Items.frequencyCard, stack.count, 0)
-            .apply { tagCompound = nbt }
     }
 
     fun onDestroy() {
